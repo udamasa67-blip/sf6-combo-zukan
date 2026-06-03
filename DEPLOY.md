@@ -36,3 +36,25 @@ VercelのEnvironment Variablesに以下を追加してください。
 - Google Search Consoleに登録
 - `https://公開URL/sitemap.xml` を送信
 - X/Discord/YouTube概要欄などに公開URLを掲載
+
+## GitHub Pages + 独自ドメイン
+
+このプロジェクトはGitHub Pagesでも公開できます。
+
+- 公開ドメイン: `https://www.miyabi-combo.com`
+- GitHub Actions: `.github/workflows/deploy.yml`
+- 独自ドメイン設定: `client/public/CNAME`
+
+GitHubのリポジトリ画面で以下を設定してください。
+
+1. `Settings` → `Pages`
+2. `Build and deployment` の `Source` を `GitHub Actions` にする
+3. `Custom domain` に `www.miyabi-combo.com` を入力
+4. DNS側で `www` のCNAMEを `udamasa67-blip.github.io` に向ける
+5. HTTPSが有効になるまで待つ
+
+DNS設定例:
+
+```txt
+CNAME  www  udamasa67-blip.github.io
+```

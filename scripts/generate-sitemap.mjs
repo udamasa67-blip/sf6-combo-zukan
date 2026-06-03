@@ -3,7 +3,7 @@ import { resolve } from "node:path";
 
 const explicitSiteUrl = process.env.SITE_URL;
 const vercelSiteUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "";
-const siteUrl = (explicitSiteUrl || vercelSiteUrl || "https://sf6-combo-zukan.vercel.app").replace(/\/+$/, "");
+const siteUrl = (explicitSiteUrl || vercelSiteUrl || "https://www.miyabi-combo.com").replace(/\/+$/, "");
 const today = new Date().toISOString().slice(0, 10);
 const routes = [
   { path: "/", priority: "1.0" },
