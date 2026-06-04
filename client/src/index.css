@@ -2009,7 +2009,8 @@
 
     .combo-video-modal-frame {
       flex: 0 0 auto;
-      height: auto;
+      height: min(calc((100vw - 1rem) * 0.5625), calc(100dvh - 12.5rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)));
+      min-height: 10rem;
       aspect-ratio: 16 / 9;
     }
 
