@@ -18,7 +18,7 @@ type TokenProps = {
 function Token({ token }: TokenProps) {
   // ⚠️ フックは常に最上位で呼び出す（条件分岐の前）
   const [visible, setVisible] = useState(false);
-  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [pos, setPos] = useState({ x: 0, y: 0, below: false });
   const showTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -57,10 +57,19 @@ function Token({ token }: TokenProps) {
   // xx トークンは少し控えめなスタイルで表示
   const isXx = token.symbol === "xx";
 
-  const showTooltip = (x: number, y: number) => {
+  const getTooltipPosition = (element: HTMLElement) => {
+    const rect = element.getBoundingClientRect();
+    const below = Boolean(element.closest(".combo-video-modal-notation")) || rect.top < 110;
+    const viewportWidth = window.innerWidth;
+    const x = Math.min(Math.max(rect.left + rect.width / 2, 130), viewportWidth - 130);
+    const y = below ? rect.bottom + 8 : rect.top - 8;
+    return { x, y, below };
+  };
+
+  const showTooltip = (position: { x: number; y: number; below: boolean }) => {
     if (hideTimer.current) clearTimeout(hideTimer.current);
     showTimer.current = setTimeout(() => {
-      setPos({ x, y });
+      setPos(position);
       setVisible(true);
     }, 180);
   };
@@ -74,8 +83,7 @@ function Token({ token }: TokenProps) {
 
   // デスクトップ: hover
   const handleMouseEnter = (e: React.MouseEvent) => {
-    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    showTooltip(rect.left + rect.width / 2, rect.top);
+    showTooltip(getTooltipPosition(e.currentTarget as HTMLElement));
   };
 
   const handleMouseLeave = () => {
@@ -89,16 +97,15 @@ function Token({ token }: TokenProps) {
       setVisible(false);
       return;
     }
-    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    setPos({ x: rect.left + rect.width / 2, y: rect.top });
+    setPos(getTooltipPosition(e.currentTarget as HTMLElement));
     setVisible(true);
   };
 
   // long press
   const handleTouchStart = (e: React.TouchEvent) => {
-    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const position = getTooltipPosition(e.currentTarget as HTMLElement);
     longPressTimer.current = setTimeout(() => {
-      setPos({ x: rect.left + rect.width / 2, y: rect.top });
+      setPos(position);
       setVisible(true);
     }, 400);
   };
@@ -121,12 +128,12 @@ function Token({ token }: TokenProps) {
       </span>
       {visible && (
         <span
-          className="token-tooltip"
+          className={`token-tooltip ${pos.below ? "token-tooltip-below" : "token-tooltip-above"}`}
           style={{
             position: "fixed",
             left: `${pos.x}px`,
-            top: `${pos.y - 8}px`,
-            transform: "translate(-50%, -100%)",
+            top: `${pos.y}px`,
+            transform: pos.below ? "translate(-50%, 0)" : "translate(-50%, -100%)",
             zIndex: 9999,
           }}
           onMouseEnter={() => {
