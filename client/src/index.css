@@ -1586,6 +1586,7 @@
 
   .combo-video-modal-notation,
   .combo-video-modal-description {
+    flex-shrink: 0;
     position: relative;
     z-index: 1;
     margin: 0;
@@ -1599,6 +1600,8 @@
   .combo-video-modal-notation {
     padding-right: 4rem;
     font-size: clamp(0.98rem, 1.8vw, 1.45rem);
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   .combo-video-modal-description {
@@ -1964,6 +1967,37 @@
   }
 
   @media (max-width: 640px) {
+    .combo-video-modal {
+      place-items: start center;
+      padding: max(0.5rem, env(safe-area-inset-top)) 0.5rem max(0.5rem, env(safe-area-inset-bottom));
+    }
+
+    .combo-video-modal-panel {
+      width: 100%;
+      max-height: calc(100dvh - 1rem - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .combo-video-modal-notation {
+      padding: 0.8rem 3.25rem 0.8rem 0.85rem;
+      font-size: 0.95rem;
+      line-height: 1.65;
+    }
+
+    .combo-video-modal-frame {
+      flex: 0 0 auto;
+      height: auto;
+      aspect-ratio: 16 / 9;
+    }
+
+    .combo-video-modal-description {
+      padding: 0.8rem 0.85rem;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
     .combo-zone {
       padding: 1.25rem 1rem 2.5rem;
       gap: 1.25rem;
