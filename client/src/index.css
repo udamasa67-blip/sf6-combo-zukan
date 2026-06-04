@@ -1984,13 +1984,18 @@
 
   @media (max-width: 640px) {
     .combo-video-modal {
-      place-items: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100vw;
+      height: 100dvh;
       padding: max(0.5rem, env(safe-area-inset-top)) 0.5rem max(0.5rem, env(safe-area-inset-bottom));
+      box-sizing: border-box;
     }
 
     .combo-video-modal-panel {
       width: 100%;
-      max-height: calc(100dvh - 1rem - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      max-height: min(92dvh, calc(100dvh - 1rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)));
       overflow-x: hidden;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
