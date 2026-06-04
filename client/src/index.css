@@ -1984,7 +1984,7 @@
 
   @media (max-width: 640px) {
     .combo-video-modal {
-      place-items: start center;
+      place-items: center;
       padding: max(0.5rem, env(safe-area-inset-top)) 0.5rem max(0.5rem, env(safe-area-inset-bottom));
     }
 

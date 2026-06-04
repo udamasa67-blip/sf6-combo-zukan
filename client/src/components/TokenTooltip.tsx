@@ -8,6 +8,7 @@
  */
 
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { tokenizeNotation, type NotationToken } from "@/lib/notationTranslator";
 
 // ===== 単一トークンのTooltipコンポーネント =====
@@ -126,24 +127,26 @@ function Token({ token }: TokenProps) {
       >
         {token.symbol}
       </span>
-      {visible && (
-        <span
-          className={`token-tooltip ${pos.below ? "token-tooltip-below" : "token-tooltip-above"}`}
-          style={{
-            position: "fixed",
-            left: `${pos.x}px`,
-            top: `${pos.y}px`,
-            transform: pos.below ? "translate(-50%, 0)" : "translate(-50%, -100%)",
-            zIndex: 9999,
-          }}
-          onMouseEnter={() => {
-            if (hideTimer.current) clearTimeout(hideTimer.current);
-          }}
-          onMouseLeave={hideTooltip}
-        >
-          {token.description}
-        </span>
-      )}
+      {visible &&
+        createPortal(
+          <span
+            className={`token-tooltip ${pos.below ? "token-tooltip-below" : "token-tooltip-above"}`}
+            style={{
+              position: "fixed",
+              left: `${pos.x}px`,
+              top: `${pos.y}px`,
+              transform: pos.below ? "translate(-50%, 0)" : "translate(-50%, -100%)",
+              zIndex: 9999,
+            }}
+            onMouseEnter={() => {
+              if (hideTimer.current) clearTimeout(hideTimer.current);
+            }}
+            onMouseLeave={hideTooltip}
+          >
+            {token.description}
+          </span>,
+          document.body
+        )}
     </>
   );
 }
