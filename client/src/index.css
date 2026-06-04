@@ -1591,7 +1591,7 @@
     z-index: 1;
     display: flex;
     flex-direction: column;
-    width: min(96vw, 1280px);
+    width: min(96vw, calc((92dvh - 10.5rem) * 1.7778), 1280px);
     max-height: min(92vh, 92dvh);
     border: 1px solid oklch(0.28 0.03 286);
     border-radius: 0.45rem;
@@ -1629,7 +1629,7 @@
     display: grid;
     place-items: center;
     width: 100%;
-    height: min(calc(96vw * 0.5625), calc(92dvh - 10.5rem), 720px);
+    height: auto;
     min-height: 0;
     aspect-ratio: 16 / 9;
     background: #000;
@@ -2013,7 +2013,7 @@
 
     .combo-video-modal-frame {
       flex: 0 0 auto;
-      height: min(calc((100vw - 1rem) * 0.5625), calc(100dvh - 12.5rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)));
+      height: auto;
       min-height: 10rem;
       aspect-ratio: 16 / 9;
     }
