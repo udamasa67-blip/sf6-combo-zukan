@@ -25,6 +25,7 @@ export function ComboVideo({ asset, notation, description }: ComboVideoProps) {
   const [shouldLoadPoster, setShouldLoadPoster] = useState(false);
   const [currentActiveVideoKey, setCurrentActiveVideoKey] = useState(activeVideoKey);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [hasStartedPlaying, setHasStartedPlaying] = useState(false);
   const videoKey = asset?.video ?? null;
   const isPlaying = Boolean(videoKey && currentActiveVideoKey === videoKey);
 
@@ -80,6 +81,10 @@ export function ComboVideo({ asset, notation, description }: ComboVideoProps) {
   }, [videoKey]);
 
   useEffect(() => {
+    if (!isPlaying) setHasStartedPlaying(false);
+  }, [isPlaying]);
+
+  useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
@@ -108,39 +113,52 @@ export function ComboVideo({ asset, notation, description }: ComboVideoProps) {
     };
   }, [isExpanded]);
 
+  const handleInlinePlay = () => {
+    if (!videoKey) return;
+
+    setActiveVideo(videoKey);
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.muted = true;
+    video.load();
+    void video.play().catch(() => {
+      /* iOS may still block playback until its media state is ready. */
+    });
+  };
+
   if (!asset) return null;
 
   return (
     <>
       <div ref={containerRef} className="combo-video-shell" aria-label={asset.label ?? "コンボ動画"}>
-        {isPlaying ? (
-          <>
-            <video
-              ref={videoRef}
-              className="combo-video"
-              poster={asset.poster}
-              preload="none"
-              muted
-              playsInline
-              loop
-            >
-              <source src={asset.video} type="video/webm" />
-            </video>
-            <button
-              type="button"
-              className="combo-video-expand"
-              onClick={() => setIsExpanded(true)}
-              aria-label={`${asset.label ?? "コンボ動画"}を拡大`}
-              title="拡大"
-            >
-              <Maximize2 size={15} />
-            </button>
-          </>
+        <video
+          ref={videoRef}
+          className="combo-video"
+          poster={asset.poster}
+          preload="none"
+          muted
+          playsInline
+          loop
+          onPlaying={() => setHasStartedPlaying(true)}
+        >
+          <source src={asset.video} type="video/webm" />
+        </video>
+        {isPlaying && hasStartedPlaying ? (
+          <button
+            type="button"
+            className="combo-video-expand"
+            onClick={() => setIsExpanded(true)}
+            aria-label={`${asset.label ?? "コンボ動画"}を拡大`}
+            title="拡大"
+          >
+            <Maximize2 size={15} />
+          </button>
         ) : (
           <button
             type="button"
             className="combo-video-poster"
-            onClick={() => setActiveVideo(asset.video)}
+            onClick={handleInlinePlay}
             aria-label={`${asset.label ?? "コンボ動画"}を再生`}
           >
             {shouldLoadPoster ? (
