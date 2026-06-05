@@ -335,7 +335,7 @@ const ingridCombosRaw: Omit<ComboData, 'driveConsumption' | 'superConsumption'>[
     number: 24,
     title: "端SA2入れ替え",
     startup: "入れ替え",
-    notation: "2MK xx SA2[HP] > 5MP~MK > 236LP > 9j. xx 214LP > 214HK > j.236LP",
+    notation: "2MK xx (OD)236K xx SA2[HP] > 5MP~MK xx 236LP > j.9 xx 214LP > 214HK > j.236LP",
     damage: 2890,
     knockdown: "+24",
     position: "端",
