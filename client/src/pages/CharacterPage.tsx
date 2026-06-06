@@ -294,6 +294,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
   const [singleLinkedComboId, setSingleLinkedComboId] = useState<number | null>(null);
   const [singleLinkReturn, setSingleLinkReturn] = useState<{ comboId: number; purpose: string } | null>(null);
   const [starterDamageMinFilter, setStarterDamageMinFilter] = useState<number | null>(null);
+  const [showIngridSa2Branches, setShowIngridSa2Branches] = useState(false);
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
 
   // 操作方式ガイドを取得
@@ -551,6 +552,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
       setSingleLinkedComboId(null);
       setSingleLinkReturn(null);
       setStarterDamageMinFilter(null);
+      setShowIngridSa2Branches(false);
       return;
     }
 
@@ -559,6 +561,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
     setSingleLinkedComboId(null);
     setSingleLinkReturn(null);
     setStarterDamageMinFilter(null);
+    setShowIngridSa2Branches(false);
 
     if (resetRouteFilters) {
       setSelectedPosition("すべて");
@@ -580,6 +583,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
     setSingleLinkedComboId(null);
     setSingleLinkReturn(null);
     setStarterDamageMinFilter(null);
+    setShowIngridSa2Branches(false);
     window.setTimeout(() => {
       document.getElementById("combos")?.scrollIntoView({ behavior: "smooth", block: "center" });
     }, 0);
@@ -600,6 +604,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
       setSingleLinkedComboId(null);
       setSingleLinkReturn(null);
       setStarterDamageMinFilter(step.starterDamageMin ?? null);
+      setShowIngridSa2Branches(false);
       window.setTimeout(() => {
         document.getElementById("combos")?.scrollIntoView({ behavior: "smooth", block: "center" });
       }, 0);
@@ -612,6 +617,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
       setSingleLinkedComboId(null);
       setSingleLinkReturn(null);
       setStarterDamageMinFilter(null);
+      setShowIngridSa2Branches(false);
       return;
     }
 
@@ -620,6 +626,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
     setSingleLinkedComboId(null);
     setSingleLinkReturn(null);
     setStarterDamageMinFilter(step.starterDamageMin ?? 5000);
+    setShowIngridSa2Branches(false);
   };
 
   const applyComboDescriptionLink = (
@@ -638,6 +645,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
     setSingleLinkedComboId(comboId);
     setSingleLinkReturn(returnTarget ?? null);
     setStarterDamageMinFilter(null);
+    setShowIngridSa2Branches(false);
     window.setTimeout(() => {
       document.getElementById("combos")?.scrollIntoView({ behavior: "smooth", block: "center" });
     }, 0);
@@ -646,19 +654,27 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
   const setupSourceCombo = setupSourceComboId
     ? combos.find((combo) => combo.id === setupSourceComboId) ?? null
     : null;
-  const visibleCombos = setupSourceCombo
+  const isIngridStep1BranchView = resolvedConfig.id === "ingrid" && setupSourceCombo?.id === 34 && selectedPurpose === "その他" && !singleLinkedComboId;
+  const isSa2BranchCombo = (combo: Combo) => normalizeSearchText(combo.route).includes("sa2");
+  const baseVisibleCombos = setupSourceCombo
     ? singleLinkedComboId
       ? singleLinkedComboId === setupSourceCombo.id
         ? []
         : sortedCombos.filter((combo) => combo.id === singleLinkedComboId)
       : sortedCombos.filter((combo) => combo.id !== setupSourceCombo.id)
     : sortedCombos;
-  const displayedComboCount = visibleCombos.length + (setupSourceCombo ? 1 : 0);
+  const shouldShowIngridSa2BranchCard = isIngridStep1BranchView && !showIngridSa2Branches && baseVisibleCombos.some(isSa2BranchCombo);
+  const visibleCombos = isIngridStep1BranchView
+    ? showIngridSa2Branches
+      ? baseVisibleCombos.filter(isSa2BranchCombo)
+      : baseVisibleCombos.filter((combo) => !isSa2BranchCombo(combo))
+    : baseVisibleCombos;
+  const displayedComboCount = visibleCombos.length + (setupSourceCombo ? 1 : 0) + (shouldShowIngridSa2BranchCard ? 1 : 0);
   const setupRouteSizeClass = !setupSourceCombo
     ? ""
-    : visibleCombos.length <= 3
+    : (visibleCombos.length + (shouldShowIngridSa2BranchCard ? 1 : 0)) <= 3
       ? "setup-route-small"
-      : visibleCombos.length <= 6
+      : (visibleCombos.length + (shouldShowIngridSa2BranchCard ? 1 : 0)) <= 6
         ? "setup-route-medium"
         : "setup-route-large";
 
@@ -709,6 +725,41 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
     }
 
     return <p>{parts.length > 0 ? parts : combo.postPatchNote}</p>;
+  };
+
+  const renderIngridSa2BranchCard = () => {
+    const branchCount = baseVisibleCombos.filter(isSa2BranchCombo).length;
+
+    return (
+      <article
+        key="ingrid-sa2-branch-card"
+        className="combo-card combo-branch-card has-next-card"
+        role="button"
+        tabIndex={0}
+        onClick={() => setShowIngridSa2Branches(true)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            setShowIngridSa2Branches(true);
+          }
+        }}
+      >
+        <div className="combo-topline">
+          <span>派生</span>
+          <b>その他</b>
+          <em>中級〜上級</em>
+        </div>
+        <h3 className="combo-notation combo-branch-notation">SA2を含む派生</h3>
+        <div className="combo-branch-summary">
+          <strong>{branchCount}</strong>
+          <span>件のSA2派生ルート</span>
+        </div>
+        <p>中級〜上級</p>
+        <button type="button" className="setup-filter-clear" onClick={() => setShowIngridSa2Branches(true)}>
+          派生一覧を見る
+        </button>
+      </article>
+    );
   };
 
   const renderComboCard = (combo: Combo) => (
@@ -985,8 +1036,9 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
                   </article>
                 )}
                 {setupSourceCombo ? (
-                  visibleCombos.length > 0 && (
+                  (visibleCombos.length > 0 || shouldShowIngridSa2BranchCard) && (
                     <div className="setup-route-candidates">
+                      {shouldShowIngridSa2BranchCard && renderIngridSa2BranchCard()}
                       {visibleCombos.map(renderComboCard)}
                     </div>
                   )
