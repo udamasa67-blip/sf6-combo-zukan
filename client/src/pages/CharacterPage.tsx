@@ -655,7 +655,9 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
     ? combos.find((combo) => combo.id === setupSourceComboId) ?? null
     : null;
   const isIngridStep1BranchView = resolvedConfig.id === "ingrid" && setupSourceCombo?.id === 34 && selectedPurpose === "その他" && !singleLinkedComboId;
+  const isIngridStep2BranchView = resolvedConfig.id === "ingrid" && setupSourceCombo?.id === 26 && selectedPurpose === "起き攻め" && !singleLinkedComboId;
   const isSa2BranchCombo = (combo: Combo) => normalizeSearchText(combo.route).includes("sa2");
+  const isSunflareCombo = (combo: Combo) => combo.starter.includes("サンフレア") || combo.postPatchNote.includes("サンフレア");
   const baseVisibleCombos = setupSourceCombo
     ? singleLinkedComboId
       ? singleLinkedComboId === setupSourceCombo.id
@@ -668,7 +670,9 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
     ? showIngridSa2Branches
       ? baseVisibleCombos.filter(isSa2BranchCombo)
       : baseVisibleCombos.filter((combo) => !isSa2BranchCombo(combo))
-    : baseVisibleCombos;
+    : isIngridStep2BranchView
+      ? baseVisibleCombos.filter((combo) => !isSunflareCombo(combo))
+      : baseVisibleCombos;
   const displayedComboCount = visibleCombos.length + (setupSourceCombo ? 1 : 0) + (shouldShowIngridSa2BranchCard ? 1 : 0);
   const setupRouteSizeClass = !setupSourceCombo
     ? ""
