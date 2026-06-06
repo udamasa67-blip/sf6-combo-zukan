@@ -622,14 +622,19 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
     setStarterDamageMinFilter(step.starterDamageMin ?? 5000);
   };
 
-  const applyComboDescriptionLink = (comboId: number, purpose: string, returnTarget?: { comboId: number; purpose: string }) => {
+  const applyComboDescriptionLink = (
+    comboId: number,
+    purpose: string,
+    returnTarget?: { comboId: number; purpose: string },
+    sourceComboId = comboId,
+  ) => {
     setSelectedPosition("すべて");
     setSelectedPurpose(purpose);
     setSearchQuery("");
     setMaxDrive(6);
     setActiveTab("all");
     setSetupFrameFilter(null);
-    setSetupSourceComboId(comboId);
+    setSetupSourceComboId(sourceComboId);
     setSingleLinkedComboId(comboId);
     setSingleLinkReturn(returnTarget ?? null);
     setStarterDamageMinFilter(null);
@@ -642,8 +647,10 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
     ? combos.find((combo) => combo.id === setupSourceComboId) ?? null
     : null;
   const visibleCombos = setupSourceCombo
-    ? singleLinkedComboId === setupSourceCombo.id
-      ? []
+    ? singleLinkedComboId
+      ? singleLinkedComboId === setupSourceCombo.id
+        ? []
+        : sortedCombos.filter((combo) => combo.id === singleLinkedComboId)
       : sortedCombos.filter((combo) => combo.id !== setupSourceCombo.id)
     : sortedCombos;
   const displayedComboCount = visibleCombos.length + (setupSourceCombo ? 1 : 0);
@@ -656,21 +663,52 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
         : "setup-route-large";
 
   const renderComboDescription = (combo: Combo) => {
-    const impactReturnText = "インパクト返し可";
-    if (resolvedConfig.id !== "ingrid" || combo.id !== 26 || !combo.postPatchNote.includes(impactReturnText)) {
-      return <p>{combo.postPatchNote}</p>;
+    const parts: ReactNode[] = [];
+    const linkPattern = /#(\d+)の派生|インパクト返し可/g;
+    let lastIndex = 0;
+    let match: RegExpExecArray | null;
+
+    while ((match = linkPattern.exec(combo.postPatchNote)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push(combo.postPatchNote.slice(lastIndex, match.index));
+      }
+
+      const matchedText = match[0];
+      const derivedComboId = match[1] ? Number(match[1]) : null;
+      if (derivedComboId && combos.some((item) => item.id === derivedComboId)) {
+        parts.push(
+          <button
+            key={`derived-${combo.id}-${derivedComboId}-${match.index}`}
+            type="button"
+            className="combo-description-link"
+            onClick={() => applyComboDescriptionLink(derivedComboId, "すべて", undefined, combo.id)}
+          >
+            {matchedText}
+          </button>
+        );
+      } else if (resolvedConfig.id === "ingrid" && combo.id === 26 && matchedText === "インパクト返し可") {
+        parts.push(
+          <button
+            key={`impact-${combo.id}-${match.index}`}
+            type="button"
+            className="combo-description-link"
+            onClick={() => applyComboDescriptionLink(32, "その他", { comboId: 26, purpose: "起き攻め" })}
+          >
+            {matchedText}
+          </button>
+        );
+      } else {
+        parts.push(matchedText);
+      }
+
+      lastIndex = match.index + matchedText.length;
     }
 
-    const [before, after] = combo.postPatchNote.split(impactReturnText);
-    return (
-      <p>
-        {before}
-        <button type="button" className="combo-description-link" onClick={() => applyComboDescriptionLink(32, "その他", { comboId: 26, purpose: "起き攻め" })}>
-          {impactReturnText}
-        </button>
-        {after}
-      </p>
-    );
+    if (lastIndex < combo.postPatchNote.length) {
+      parts.push(combo.postPatchNote.slice(lastIndex));
+    }
+
+    return <p>{parts.length > 0 ? parts : combo.postPatchNote}</p>;
   };
 
   const renderComboCard = (combo: Combo) => (
