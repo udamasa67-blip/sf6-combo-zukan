@@ -1038,8 +1038,8 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
                 {setupSourceCombo ? (
                   (visibleCombos.length > 0 || shouldShowIngridSa2BranchCard) && (
                     <div className="setup-route-candidates">
-                      {shouldShowIngridSa2BranchCard && renderIngridSa2BranchCard()}
                       {visibleCombos.map(renderComboCard)}
+                      {shouldShowIngridSa2BranchCard && renderIngridSa2BranchCard()}
                     </div>
                   )
                 ) : (
