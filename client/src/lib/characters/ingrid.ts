@@ -551,7 +551,7 @@ const ingridCombosRaw: Omit<ComboData, 'driveConsumption' | 'superConsumption'>[
     position: "どこでも",
     difficulty: "中",
     stock: "2",
-    description: "#37の派生サンフレアLv3始動5LPフレーム消費から6MPで+5の起き攻め",
+    description: "#38の派生サンフレアLv3始動5LPフレーム消費から6MPで+5の起き攻め",
     videoAsset: comboVideoAsset("ingrid_39", "イングリッド #39 サンフレアLv3ストック2起き攻め"),
   },
   {
