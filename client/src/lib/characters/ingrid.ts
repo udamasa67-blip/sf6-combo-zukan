@@ -517,7 +517,7 @@ const ingridCombosRaw: Omit<ComboData, 'driveConsumption' | 'superConsumption'>[
     number: 37,
     title: "お手軽リーサル",
     startup: "その他・リーサル",
-    notation: "6HP > (OD)214HP[2] > SA3",
+    notation: "6HP > (OD)214P[3] > SA3",
     damage: 5696,
     knockdown: "+30",
     position: "どこでも",
