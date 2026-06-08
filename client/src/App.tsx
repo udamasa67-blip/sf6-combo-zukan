@@ -4,14 +4,27 @@ Keep the full report in a dark, premium analytical atmosphere so character data 
 */
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { trackPageView } from "@/lib/analytics";
 import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
+import { useEffect } from "react";
+import { Route, Switch, useLocation } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import ArchiveHome from "./pages/ArchiveHome";
 import CharacterPage from "./pages/CharacterPage";
 import "./lib/characters/elena";
 import "./lib/characters/ingrid";
+
+function AnalyticsTracker() {
+  const [location] = useLocation();
+
+  useEffect(() => {
+    const pagePath = `${location}${window.location.search}${window.location.hash}`;
+    window.setTimeout(() => trackPageView(pagePath), 0);
+  }, [location]);
+
+  return null;
+}
 
 function Router() {
   return (
@@ -31,6 +44,7 @@ function App() {
       <ThemeProvider defaultTheme="dark">
         <TooltipProvider>
           <Toaster />
+          <AnalyticsTracker />
           <Router />
         </TooltipProvider>
       </ThemeProvider>
