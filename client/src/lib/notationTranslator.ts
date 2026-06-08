@@ -35,6 +35,8 @@ const normalMoveDict: Record<string, string> = {
   "HK": "強キック",
   "P": "パンチ",
   "K": "キック",
+  "PP": "パンチ2つ同時押し",
+  "KK": "キック2つ同時押し",
   "PPP": "パンチ3つ同時押し",
   "KKK": "キック3つ同時押し",
   // 方向+ボタン（追加入力）
@@ -262,6 +264,13 @@ function getTokenDescription(token: string): string | null {
 /**
  * トークン型定義
  */
+
+export function formatOdNotationForDisplay(notation: string): string {
+  return notation.replace(/\(OD\)(j\.)?(\d+)([PK])(?![PK])(\[\d+\])?/g, (_match, jump = "", motion, button, charge = "") => {
+    return `(OD)${jump}${motion}${button}${button}${charge}`;
+  });
+}
+
 export type NotationToken = {
   symbol: string;       // 元の記号表記
   description: string | null; // 日本語説明（nullなら説明なし）
@@ -323,7 +332,7 @@ function expandTildeToken(raw: string): NotationToken[] {
 export function tokenizeNotation(notation: string): NotationToken[] {
   // 事前処理：スペースを含む複合パターンを一時的に置換
   const placeholders: Record<string, string> = {};
-  let processed = notation;
+  let processed = formatOdNotationForDisplay(notation);
 
   const complexPatterns = [
     { pattern: /\(W! STN\)DI/g, key: "W_STN_DI" },
@@ -385,12 +394,12 @@ export function tokenizeNotation(notation: string): NotationToken[] {
  * @deprecated tokenizeNotation を使用してください
  */
 export function convertToHybridNotation(notation: string): string {
-  return notation;
+  return formatOdNotationForDisplay(notation);
 }
 
 /**
  * 記号表記のみを返す（通常表示用）
  */
 export function getSymbolNotation(notation: string): string {
-  return notation;
+  return formatOdNotationForDisplay(notation);
 }
