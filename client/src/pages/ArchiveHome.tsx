@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { ComboClickBuilder } from "@/components/ComboClickBuilder";
 import { getCharacterConfig } from "@/lib/characterConfig";
 
 function countVideos(characterId: string) {
@@ -111,6 +112,8 @@ export default function ArchiveHome() {
           </a>
         </div>
       </section>
+
+      <ComboClickBuilder />
     </main>
   );
 }
