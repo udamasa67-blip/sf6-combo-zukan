@@ -173,10 +173,8 @@ function PaletteButton({
 
 function DirectionNumpad({
   onAdd,
-  directionMode,
 }: {
   onAdd: (id: string) => void;
-  directionMode: DirectionNotationMode;
 }) {
   const numpadLayout = [
     ["7", "8", "9"],
@@ -186,7 +184,7 @@ function DirectionNumpad({
 
   const dirLabels: Record<string, string> = {
     "7": "↖", "8": "↑", "9": "↗",
-    "4": "←", "5": "N", "6": "→",
+    "4": "←", "5": "○", "6": "→",
     "1": "↙", "2": "↓", "3": "↘",
   };
 
@@ -198,11 +196,10 @@ function DirectionNumpad({
             <button
               key={num}
               onClick={() => onAdd(num)}
-              className="palette-btn bg-slate-800 border border-slate-500 text-slate-200 w-10 h-10 flex flex-col items-center justify-center leading-none"
+              className="palette-btn bg-slate-800 border border-slate-500 text-slate-200 w-10 h-10 flex flex-col items-center justify-center gap-0.5 leading-none"
             >
-              <span className="text-lg">
-                {directionMode === "arrow" ? dirLabels[num] : num}
-              </span>
+              <span className="text-lg leading-none">{dirLabels[num]}</span>
+              <span className="text-[10px] font-mono leading-none text-slate-300/80">{num}</span>
             </button>
           ))}
         </div>
@@ -535,7 +532,7 @@ export function ComboClickBuilder() {
 
             <SectionLabel>方向入力</SectionLabel>
             <div className="flex gap-2 items-start">
-              <DirectionNumpad onAdd={addToken} directionMode={directionMode} />
+              <DirectionNumpad onAdd={addToken} />
               <div className="flex flex-col gap-0.5 pt-0.5">
                 {prefixDirections.map((t) => (
                   <PaletteButton
