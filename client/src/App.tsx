@@ -12,6 +12,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import ArchiveHome from "./pages/ArchiveHome";
 import CharacterPage from "./pages/CharacterPage";
+import ComboToolPage from "./pages/ComboToolPage";
 import "./lib/characters/elena";
 import "./lib/characters/ingrid";
 
@@ -32,6 +33,8 @@ function Router() {
       <Route path="/" component={ArchiveHome} />
       <Route path="/elena" component={() => <CharacterPage characterId="elena" />} />
       <Route path="/ingrid" component={() => <CharacterPage characterId="ingrid" />} />
+      <Route path="/SF6_combo_tool" component={ComboToolPage} />
+      <Route path="/sf6_combo_tool" component={ComboToolPage} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
