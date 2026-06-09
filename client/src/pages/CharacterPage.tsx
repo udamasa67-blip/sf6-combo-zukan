@@ -2,7 +2,7 @@
 Design reminder: Editorial Afro-Modernism × Competitive Data Desk.
 Keep the full report in a dark, premium analytical atmosphere.
 */
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { analyzeComboViability } from "@/lib/moveSearchSystem";
 import {
   BookOpen,
@@ -359,6 +359,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
   const [routeDirectionMode, setRouteDirectionMode] = useState<DirectionNotationMode>("number");
   const [routeNotationMode, setRouteNotationMode] = useState<NotationMode>("en");
+  const comboGridRef = useRef<HTMLDivElement | null>(null);
 
   // 操作方式ガイドを取得
   const getControlGuide = () => {
@@ -752,6 +753,53 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
       routeNotationMode,
     );
 
+  const visibleComboSignature = `${setupSourceCombo?.id ?? ""}|${visibleCombos.map((combo) => combo.id).join(",")}|${showIngridSa2Branches ? "branches" : "base"}`;
+
+  useEffect(() => {
+    const grid = comboGridRef.current;
+    if (!grid || activeTab === "control-guide") return;
+
+    let animationFrame = 0;
+
+    const syncNotationHeights = () => {
+      window.cancelAnimationFrame(animationFrame);
+      animationFrame = window.requestAnimationFrame(() => {
+        const headings = Array.from(grid.querySelectorAll<HTMLElement>(".combo-card h3.combo-notation"));
+        headings.forEach((heading) => {
+          heading.style.minHeight = "";
+        });
+
+        const rows = new Map<number, HTMLElement[]>();
+        headings.forEach((heading) => {
+          const card = heading.closest<HTMLElement>(".combo-card");
+          const rowTop = Math.round(card?.offsetTop ?? heading.offsetTop);
+          const row = rows.get(rowTop) ?? [];
+          row.push(heading);
+          rows.set(rowTop, row);
+        });
+
+        rows.forEach((rowHeadings) => {
+          const rowHeight = rowHeadings.reduce((maxHeight, heading) => Math.max(maxHeight, heading.scrollHeight), 0);
+          rowHeadings.forEach((heading) => {
+            heading.style.minHeight = `${rowHeight}px`;
+          });
+        });
+      });
+    };
+
+    syncNotationHeights();
+    window.addEventListener("resize", syncNotationHeights);
+
+    const resizeObserver = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(syncNotationHeights);
+    resizeObserver?.observe(grid);
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      window.removeEventListener("resize", syncNotationHeights);
+      resizeObserver?.disconnect();
+    };
+  }, [activeTab, displayedComboCount, routeDirectionMode, routeNotationMode, setupRouteSizeClass, shouldShowIngridSa2BranchCard, visibleComboSignature]);
+
   const renderComboDescription = (combo: Combo) => {
     const parts: ReactNode[] = [];
     const linkPattern = /#(\d+)の派生|インパクト返し可/g;
@@ -1079,7 +1127,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
                   onNotationModeChange={setRouteNotationMode}
                 />
               </div>
-              <div className={setupSourceCombo ? `setup-route-board ${setupRouteSizeClass}` : "combo-grid"}>
+              <div ref={comboGridRef} className={setupSourceCombo ? `setup-route-board ${setupRouteSizeClass}` : "combo-grid"}>
                 {setupSourceCombo && (
                   <article id={`combo-card-${setupSourceCombo.id}`} className={`combo-card setup-origin-card ${canOpenSetupFrame(setupSourceCombo) ? "has-next-card" : ""}`}>
                     <div className="combo-topline">

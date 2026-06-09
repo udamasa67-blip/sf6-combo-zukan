@@ -1345,7 +1345,7 @@
     line-height: 1.42;
     word-break: break-word;
     overflow-wrap: anywhere;
-    min-height: calc(1.42em * 4);
+    min-height: 0;
     height: auto;
     display: block;
     overflow: visible;
