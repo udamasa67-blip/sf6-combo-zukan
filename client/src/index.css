@@ -2619,6 +2619,12 @@
   font-size: 0.86rem;
 }
 
+.archive-tool-zone {
+  width: min(100%, 1400px);
+  margin: 0 auto;
+  padding: 0 2rem 4rem;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .archive-hero {
