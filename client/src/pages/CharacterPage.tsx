@@ -761,41 +761,46 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
 
     let animationFrame = 0;
 
-    const syncNotationHeights = () => {
+    const syncRowHeights = () => {
       window.cancelAnimationFrame(animationFrame);
       animationFrame = window.requestAnimationFrame(() => {
-        const headings = Array.from(grid.querySelectorAll<HTMLElement>(".combo-card h3.combo-notation"));
-        headings.forEach((heading) => {
-          heading.style.minHeight = "";
-        });
-
-        const rows = new Map<number, HTMLElement[]>();
-        headings.forEach((heading) => {
-          const card = heading.closest<HTMLElement>(".combo-card");
-          const rowTop = Math.round(card?.offsetTop ?? heading.offsetTop);
-          const row = rows.get(rowTop) ?? [];
-          row.push(heading);
-          rows.set(rowTop, row);
-        });
-
-        rows.forEach((rowHeadings) => {
-          const rowHeight = rowHeadings.reduce((maxHeight, heading) => Math.max(maxHeight, heading.scrollHeight), 0);
-          rowHeadings.forEach((heading) => {
-            heading.style.minHeight = `${rowHeight}px`;
+        const syncElements = (selector: string) => {
+          const elements = Array.from(grid.querySelectorAll<HTMLElement>(selector));
+          elements.forEach((element) => {
+            element.style.minHeight = "";
           });
-        });
+
+          const rows = new Map<number, HTMLElement[]>();
+          elements.forEach((element) => {
+            const card = element.closest<HTMLElement>(".combo-card");
+            const rowTop = Math.round(card?.offsetTop ?? element.offsetTop);
+            const row = rows.get(rowTop) ?? [];
+            row.push(element);
+            rows.set(rowTop, row);
+          });
+
+          rows.forEach((rowElements) => {
+            const rowHeight = rowElements.reduce((maxHeight, element) => Math.max(maxHeight, element.scrollHeight), 0);
+            rowElements.forEach((element) => {
+              element.style.minHeight = `${rowHeight}px`;
+            });
+          });
+        };
+
+        syncElements(".combo-card h3.combo-notation");
+        syncElements(".combo-card > p");
       });
     };
 
-    syncNotationHeights();
-    window.addEventListener("resize", syncNotationHeights);
+    syncRowHeights();
+    window.addEventListener("resize", syncRowHeights);
 
-    const resizeObserver = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(syncNotationHeights);
+    const resizeObserver = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(syncRowHeights);
     resizeObserver?.observe(grid);
 
     return () => {
       window.cancelAnimationFrame(animationFrame);
-      window.removeEventListener("resize", syncNotationHeights);
+      window.removeEventListener("resize", syncRowHeights);
       resizeObserver?.disconnect();
     };
   }, [activeTab, displayedComboCount, routeDirectionMode, routeNotationMode, setupRouteSizeClass, shouldShowIngridSa2BranchCard, visibleComboSignature]);

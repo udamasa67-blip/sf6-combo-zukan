@@ -1548,9 +1548,9 @@
     line-height: 1.58;
     color: oklch(0.85 0.01 65);
     margin-top: 0;
-    margin-bottom: 0;
-    height: 4.75em;
-    overflow: hidden;
+    min-height: 0;
+    height: auto;
+    overflow: visible;
     flex-shrink: 0;
     margin-bottom: 0.5rem;
   }
