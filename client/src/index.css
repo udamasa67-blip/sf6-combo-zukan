@@ -2838,7 +2838,7 @@
   }
 
   .palette-btn::before,
-  .combo-token::before {
+  .builder-combo-token::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -2854,16 +2854,26 @@
     transform: scale(0.94);
   }
 
-  .combo-sequence {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
+
+  .builder-combo-sequence {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
     align-items: center;
+    align-content: flex-start;
+    gap: 0.4rem;
     min-height: 3.5rem;
     padding: 0.75rem 1rem;
   }
 
-  .combo-token {
+  .builder-combo-sequence > .builder-combo-token {
+    display: inline-flex !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    max-width: 100%;
+  }
+
+  .builder-combo-token {
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
@@ -2880,15 +2890,15 @@
     transition: transform 120ms cubic-bezier(0.23, 1, 0.32, 1), opacity 120ms ease;
   }
 
-  .combo-token:hover {
+  .builder-combo-token:hover {
     transform: translateY(-1px);
   }
 
-  .combo-token.dragging {
+  .builder-combo-token.dragging {
     opacity: 0.45;
   }
 
-  .combo-token.drag-over {
+  .builder-combo-token.drag-over {
     outline: 2px solid oklch(0.72 0.2 142);
     outline-offset: 2px;
   }

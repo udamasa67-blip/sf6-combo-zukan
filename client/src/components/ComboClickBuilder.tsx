@@ -175,7 +175,7 @@ function ComboChip({
           onDragOver("");
         }
       }}
-      className={`combo-token token-enter ${token.color} ${token.border} ${token.textColor} group ${
+      className={`builder-combo-token token-enter ${token.color} ${token.border} ${token.textColor} group ${
         isDragging ? "dragging" : ""
       } ${isDragOver ? "drag-over" : ""}`}
       style={{ animationDelay: `${Math.min(index * 20, 200)}ms` }}
@@ -525,7 +525,7 @@ export function ComboClickBuilder() {
               </div>
             </div>
 
-            <div className="combo-sequence" style={{ minHeight: "8rem" }}>
+            <div className="builder-combo-sequence" style={{ minHeight: "8rem" }}>
               {combo.length === 0 ? (
                 <div className="flex items-center justify-center w-full py-4">
                   <p className="text-zinc-400 text-sm font-mono">
