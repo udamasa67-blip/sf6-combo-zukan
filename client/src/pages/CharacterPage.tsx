@@ -26,6 +26,8 @@ import {
 } from "@/lib/comboRouteDisplay";
 import { matchesComboKeyword } from "@/lib/comboKeyword";
 import { normalizeSearchText } from "@/lib/searchText";
+import { formatComboNotationPreference } from "@/lib/comboNotationPreferences";
+import type { DirectionNotationMode, NotationMode } from "@/lib/sf6ClickBuilderNotation";
 
 type Combo = {
   id: number;
@@ -77,6 +79,65 @@ function formatDriveGaugeConsumption(combo: Pick<Combo, "drive" | "driveGaugeCos
 
   if (minimum === undefined || minimum === drive) return String(drive);
   return `${drive}（最低${minimum}）`;
+}
+
+function NotationPreferenceControls({
+  directionMode,
+  notationMode,
+  onDirectionModeChange,
+  onNotationModeChange,
+}: {
+  directionMode: DirectionNotationMode;
+  notationMode: NotationMode;
+  onDirectionModeChange: (mode: DirectionNotationMode) => void;
+  onNotationModeChange: (mode: NotationMode) => void;
+}) {
+  return (
+    <div className="notation-preference-controls" aria-label="入力コマンド表示切り替え">
+      <div className="notation-preference-group" aria-label="方向表記">
+        <span>方向</span>
+        <div>
+          <button
+            type="button"
+            className={directionMode === "arrow" ? "active" : ""}
+            onClick={() => onDirectionModeChange("arrow")}
+            aria-pressed={directionMode === "arrow"}
+          >
+            矢印
+          </button>
+          <button
+            type="button"
+            className={directionMode === "number" ? "active" : ""}
+            onClick={() => onDirectionModeChange("number")}
+            aria-pressed={directionMode === "number"}
+          >
+            数字
+          </button>
+        </div>
+      </div>
+      <div className="notation-preference-group attack" aria-label="攻撃表記">
+        <span>攻撃</span>
+        <div>
+          <button
+            type="button"
+            className={notationMode === "en" ? "active" : ""}
+            onClick={() => onNotationModeChange("en")}
+            aria-pressed={notationMode === "en"}
+          >
+            LP
+          </button>
+          <button
+            type="button"
+            className={notationMode === "jp" ? "active" : ""}
+            onClick={() => onNotationModeChange("jp")}
+            aria-pressed={notationMode === "jp"}
+          >
+            弱P
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 interface CharacterPageProps {
@@ -296,6 +357,8 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
   const [starterDamageMinFilter, setStarterDamageMinFilter] = useState<number | null>(null);
   const [showIngridSa2Branches, setShowIngridSa2Branches] = useState(false);
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
+  const [routeDirectionMode, setRouteDirectionMode] = useState<DirectionNotationMode>("number");
+  const [routeNotationMode, setRouteNotationMode] = useState<NotationMode>("en");
 
   // 操作方式ガイドを取得
   const getControlGuide = () => {
@@ -682,6 +745,13 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
         ? "setup-route-medium"
         : "setup-route-large";
 
+  const formatRouteForCardDisplay = (combo: Combo) =>
+    formatComboNotationPreference(
+      formatComboRouteForDisplay(combo.route, combo.postPatchNote),
+      routeDirectionMode,
+      routeNotationMode,
+    );
+
   const renderComboDescription = (combo: Combo) => {
     const parts: ReactNode[] = [];
     const linkPattern = /#(\d+)の派生|インパクト返し可/g;
@@ -774,7 +844,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
         <em>{combo.purpose}</em>
         <FavoriteButton comboId={combo.id} isFavorite={favorites.includes(combo.id)} onToggle={toggleFavorite} />
       </div>
-      <h3 className="combo-notation"><NotationDisplay notation={formatComboRouteForDisplay(combo.route, combo.postPatchNote)} /></h3>
+      <h3 className="combo-notation"><NotationDisplay notation={formatRouteForCardDisplay(combo)} /></h3>
       <HPGaugeDisplay damage={combo.damage} />
       <div className={`combo-metrics ${shouldShowStock ? "has-stock" : ""}`}>
         <span className="metric-damage"><small>ダメージ</small><strong>{combo.damageLabel || combo.damage}</strong></span>
@@ -797,7 +867,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
         <span className="metric-drive"><small>ドライブゲージ消費</small><strong>{formatDriveGaugeConsumption(combo)}</strong></span>
       </div>
       {renderComboDescription(combo)}
-      <ComboVideo asset={combo.videoAsset} notation={formatComboRouteForDisplay(combo.route, combo.postPatchNote)} description={combo.postPatchNote} />
+      <ComboVideo asset={combo.videoAsset} notation={formatRouteForCardDisplay(combo)} description={combo.postPatchNote} />
     </article>
   );
 
@@ -996,10 +1066,18 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
             <ControlGuide guide={controlGuide} />
           ) : (
             <>
-              <div className="section-heading">
-                <p className="kicker">Route cards</p>
-                <h2>始動別コンボ一覧</h2>
-                <p>カードはダメージ、起き攻め有利、Drive/Super消費、次の連携候補を同時に確認できるよう構成しています。有利フレームから次のカードを開けるコンボは強調表示されます。</p>
+              <div className="combo-route-heading">
+                <div className="section-heading">
+                  <p className="kicker">Route cards</p>
+                  <h2>始動別コンボ一覧</h2>
+                  <p>カードはダメージ、起き攻め有利、Drive/Super消費、次の連携候補を同時に確認できるよう構成しています。有利フレームから次のカードを開けるコンボは強調表示されます。</p>
+                </div>
+                <NotationPreferenceControls
+                  directionMode={routeDirectionMode}
+                  notationMode={routeNotationMode}
+                  onDirectionModeChange={setRouteDirectionMode}
+                  onNotationModeChange={setRouteNotationMode}
+                />
               </div>
               <div className={setupSourceCombo ? `setup-route-board ${setupRouteSizeClass}` : "combo-grid"}>
                 {setupSourceCombo && (
@@ -1010,7 +1088,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
                       <em>{setupSourceCombo.purpose}</em>
                       <FavoriteButton comboId={setupSourceCombo.id} isFavorite={favorites.includes(setupSourceCombo.id)} onToggle={toggleFavorite} />
                     </div>
-                    <h3 className="combo-notation"><NotationDisplay notation={formatComboRouteForDisplay(setupSourceCombo.route, setupSourceCombo.postPatchNote)} /></h3>
+                    <h3 className="combo-notation"><NotationDisplay notation={formatRouteForCardDisplay(setupSourceCombo)} /></h3>
                     <HPGaugeDisplay damage={setupSourceCombo.damage} />
                     <div className={`combo-metrics ${shouldShowStock ? "has-stock" : ""}`}>
                       <span className="metric-damage"><small>ダメージ</small><strong>{setupSourceCombo.damageLabel || setupSourceCombo.damage}</strong></span>
@@ -1033,7 +1111,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
                       <span className="metric-drive"><small>ドライブゲージ消費</small><strong>{formatDriveGaugeConsumption(setupSourceCombo)}</strong></span>
                     </div>
                     {renderComboDescription(setupSourceCombo)}
-                    <ComboVideo asset={setupSourceCombo.videoAsset} notation={formatComboRouteForDisplay(setupSourceCombo.route, setupSourceCombo.postPatchNote)} description={setupSourceCombo.postPatchNote} />
+                    <ComboVideo asset={setupSourceCombo.videoAsset} notation={formatRouteForCardDisplay(setupSourceCombo)} description={setupSourceCombo.postPatchNote} />
                     <button type="button" className="setup-filter-clear" onClick={() => clearSetupFrameFilter(true)}>
                       連携解除
                     </button>

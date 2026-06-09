@@ -1066,6 +1066,92 @@
     margin: 0;
   }
 
+
+  .combo-route-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1.5rem;
+    align-items: start;
+    width: 100%;
+  }
+
+  .combo-route-heading .section-heading {
+    margin: 0;
+    min-width: 0;
+  }
+
+  .notation-preference-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.8rem;
+    padding-top: 0.1rem;
+  }
+
+  .notation-preference-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 3.8rem;
+    padding: 0.55rem 0.65rem;
+    border: 1px solid rgba(34, 211, 238, 0.48);
+    border-radius: 0.35rem;
+    background: rgba(4, 12, 18, 0.82);
+    box-shadow: 0 0 18px rgba(34, 211, 238, 0.12);
+    font-family: "Noto Sans JP", sans-serif;
+  }
+
+  .notation-preference-group.attack {
+    border-color: rgba(249, 115, 22, 0.5);
+    background: rgba(24, 10, 4, 0.82);
+    box-shadow: 0 0 18px rgba(249, 115, 22, 0.12);
+  }
+
+  .notation-preference-group > span {
+    color: oklch(0.78 0.09 210);
+    font-weight: 900;
+    font-size: 0.95rem;
+    white-space: nowrap;
+  }
+
+  .notation-preference-group.attack > span {
+    color: oklch(0.82 0.12 55);
+  }
+
+  .notation-preference-group > div {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.2rem;
+    border-radius: 0.28rem;
+    background: rgba(3, 5, 7, 0.78);
+  }
+
+  .notation-preference-group button {
+    min-width: 4.4rem;
+    min-height: 2.4rem;
+    padding: 0.45rem 0.8rem;
+    border: 0;
+    border-radius: 0.28rem;
+    background: transparent;
+    color: oklch(0.78 0.02 95);
+    font-weight: 900;
+    font-size: 0.95rem;
+    line-height: 1;
+    transition: background 140ms ease, color 140ms ease, box-shadow 140ms ease;
+  }
+
+  .notation-preference-group button.active {
+    color: oklch(0.1 0.01 286);
+    background: oklch(0.72 0.14 210);
+    box-shadow: 0 0 14px rgba(34, 211, 238, 0.45);
+  }
+
+  .notation-preference-group.attack button.active {
+    background: oklch(0.72 0.18 55);
+    box-shadow: 0 0 14px rgba(249, 115, 22, 0.45);
+  }
+
   .combo-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1193,7 +1279,8 @@
   }
 
   .combo-zone.setup-route-zone > .combo-filters,
-  .combo-zone.setup-route-zone .combo-content > .section-heading {
+  .combo-zone.setup-route-zone .combo-content > .section-heading,
+  .combo-zone.setup-route-zone .combo-content > .combo-route-heading {
     display: none;
   }
 
@@ -2105,6 +2192,30 @@
 
     .section-heading h2 {
       font-size: 1.8rem;
+    }
+
+
+    .combo-route-heading {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .notation-preference-controls {
+      justify-content: stretch;
+    }
+
+    .notation-preference-group {
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .notation-preference-group > div {
+      flex: 1;
+    }
+
+    .notation-preference-group button {
+      flex: 1;
+      min-width: 0;
     }
 
     .combo-grid {
