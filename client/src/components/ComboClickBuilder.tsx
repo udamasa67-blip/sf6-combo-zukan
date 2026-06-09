@@ -1,4 +1,4 @@
-import { useCallback, useState, type ReactNode } from "react";
+import { useCallback, useState, type CSSProperties, type ReactNode } from "react";
 import { toast } from "sonner";
 import {
   ATTACK_TOKENS,
@@ -17,6 +17,109 @@ import {
   type NotationMode,
   type PaletteToken,
 } from "@/lib/sf6ClickBuilderNotation";
+
+
+const tokenColorMap: Record<string, string> = {
+  "bg-blue-900": "#1e3a8a",
+  "bg-blue-950": "#172554",
+  "bg-yellow-900": "#713f12",
+  "bg-yellow-950": "#422006",
+  "bg-red-900": "#7f1d1d",
+  "bg-red-800": "#991b1b",
+  "bg-red-950": "#450a0a",
+  "bg-sky-900": "#0c4a6e",
+  "bg-cyan-900": "#164e63",
+  "bg-green-900": "#14532d",
+  "bg-green-950": "#052e16",
+  "bg-purple-900": "#581c87",
+  "bg-purple-950": "#3b0764",
+  "bg-orange-900": "#7c2d12",
+  "bg-orange-950": "#431407",
+  "bg-lime-900": "#365314",
+  "bg-emerald-900": "#064e3b",
+  "bg-slate-800": "#1e293b",
+  "bg-slate-700": "#334155",
+  "bg-violet-900": "#4c1d95",
+  "bg-rose-950": "#4c0519",
+  "bg-amber-950": "#451a03",
+  "bg-zinc-800": "#27272a",
+  "bg-teal-900": "#134e4a",
+};
+
+const tokenBorderColorMap: Record<string, string> = {
+  "border-blue-300": "#93c5fd",
+  "border-blue-400": "#60a5fa",
+  "border-blue-600": "#2563eb",
+  "border-yellow-300": "#fde047",
+  "border-yellow-400": "#facc15",
+  "border-yellow-600": "#ca8a04",
+  "border-red-300": "#fca5a5",
+  "border-red-400": "#f87171",
+  "border-red-500": "#ef4444",
+  "border-red-600": "#dc2626",
+  "border-sky-400": "#38bdf8",
+  "border-cyan-400": "#22d3ee",
+  "border-green-300": "#86efac",
+  "border-green-400": "#4ade80",
+  "border-green-600": "#16a34a",
+  "border-purple-300": "#d8b4fe",
+  "border-purple-400": "#c084fc",
+  "border-purple-600": "#9333ea",
+  "border-orange-300": "#fdba74",
+  "border-orange-400": "#fb923c",
+  "border-orange-600": "#ea580c",
+  "border-lime-400": "#a3e635",
+  "border-emerald-400": "#34d399",
+  "border-slate-400": "#94a3b8",
+  "border-slate-500": "#64748b",
+  "border-violet-400": "#a78bfa",
+  "border-rose-500": "#f43f5e",
+  "border-amber-400": "#fbbf24",
+  "border-zinc-500": "#71717a",
+  "border-teal-400": "#2dd4bf",
+};
+
+const tokenTextColorMap: Record<string, string> = {
+  "text-blue-100": "#dbeafe",
+  "text-blue-200": "#bfdbfe",
+  "text-blue-300": "#93c5fd",
+  "text-yellow-100": "#fef9c3",
+  "text-yellow-200": "#fef08a",
+  "text-yellow-300": "#fde047",
+  "text-red-100": "#fee2e2",
+  "text-red-200": "#fecaca",
+  "text-red-300": "#fca5a5",
+  "text-sky-200": "#bae6fd",
+  "text-cyan-200": "#a5f3fc",
+  "text-green-100": "#dcfce7",
+  "text-green-200": "#bbf7d0",
+  "text-green-300": "#86efac",
+  "text-purple-100": "#f3e8ff",
+  "text-purple-200": "#e9d5ff",
+  "text-purple-300": "#d8b4fe",
+  "text-orange-100": "#ffedd5",
+  "text-orange-200": "#fed7aa",
+  "text-orange-300": "#fdba74",
+  "text-lime-200": "#d9f99d",
+  "text-emerald-200": "#a7f3d0",
+  "text-slate-100": "#f1f5f9",
+  "text-slate-200": "#e2e8f0",
+  "text-violet-200": "#ddd6fe",
+  "text-rose-300": "#fda4af",
+  "text-amber-200": "#fde68a",
+  "text-zinc-200": "#e4e4e7",
+  "text-teal-200": "#99f6e4",
+};
+
+function getTokenVisualStyle(token: PaletteToken): CSSProperties {
+  const borderColor = tokenBorderColorMap[token.border] ?? "#64748b";
+  return {
+    backgroundColor: tokenColorMap[token.color] ?? "#1f2937",
+    border: "1px solid " + borderColor,
+    color: tokenTextColorMap[token.textColor] ?? "#f8fafc",
+    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.16), 0 0 10px " + token.glowColor,
+  };
+}
 
 function SectionLabel({ children }: { children: ReactNode }) {
   return (
@@ -178,7 +281,7 @@ function ComboChip({
       className={`builder-combo-token token-enter ${token.color} ${token.border} ${token.textColor} group ${
         isDragging ? "dragging" : ""
       } ${isDragOver ? "drag-over" : ""}`}
-      style={{ animationDelay: `${Math.min(index * 20, 200)}ms` }}
+      style={{ ...getTokenVisualStyle(token), animationDelay: `${Math.min(index * 20, 200)}ms` }}
     >
       <span>{formatTokenNotation(token, notationMode, directionMode).trim()}</span>
       <button

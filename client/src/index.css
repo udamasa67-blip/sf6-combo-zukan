@@ -2876,13 +2876,17 @@
   .builder-combo-token {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.25rem;
+    min-width: 3.25rem;
+    min-height: 2rem;
     padding: 0.25rem 0.6rem;
     border-radius: 0.25rem;
     font-family: "IBM Plex Mono", "Noto Sans JP", monospace;
     font-size: 0.9rem;
     font-weight: 800;
     border-width: 1px;
+    border-style: solid;
     cursor: grab;
     user-select: none;
     position: relative;
