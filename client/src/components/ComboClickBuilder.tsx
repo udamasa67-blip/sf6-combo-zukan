@@ -460,8 +460,8 @@ export function ComboClickBuilder() {
   );
 
   return (
-    <div className="min-h-screen bg-background flex flex-col" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-      <header className="border-b border-zinc-800 px-4 py-2 flex items-center gap-2 shrink-0">
+    <div className="combo-click-builder min-h-screen bg-background flex flex-col" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+      <header className="combo-click-builder-header border-b border-zinc-800 px-4 py-2 flex items-center gap-2 shrink-0">
         <div className="flex items-center gap-1.5">
           <div
             className="w-7 h-7 rounded flex items-center justify-center text-xs font-bold"
@@ -488,7 +488,7 @@ export function ComboClickBuilder() {
         <div className="ml-auto text-xs text-zinc-200 font-mono">
           クリックだけでコンボ表記を作成
         </div>
-        <div className="flex items-center gap-1 rounded border border-cyan-700/70 bg-cyan-950/25 p-1 font-mono text-xs shadow-[0_0_10px_rgba(8,145,178,0.15)]">
+        <div className="combo-click-builder-toggle flex items-center gap-1 rounded border border-cyan-700/70 bg-cyan-950/25 p-1 font-mono text-xs shadow-[0_0_10px_rgba(8,145,178,0.15)]">
           <span className="px-1.5 text-[11px] font-semibold text-cyan-200">方向</span>
           <div className="flex items-center rounded bg-zinc-950/70 p-0.5">
             <button
@@ -517,7 +517,7 @@ export function ComboClickBuilder() {
             </button>
           </div>
         </div>
-        <div className="flex items-center gap-1 rounded border border-orange-700/70 bg-orange-950/25 p-1 font-mono text-xs shadow-[0_0_10px_rgba(234,88,12,0.15)]">
+        <div className="combo-click-builder-toggle flex items-center gap-1 rounded border border-orange-700/70 bg-orange-950/25 p-1 font-mono text-xs shadow-[0_0_10px_rgba(234,88,12,0.15)]">
           <span className="px-1.5 text-[11px] font-semibold text-orange-200">攻撃</span>
           <div className="flex items-center rounded bg-zinc-950/70 p-0.5">
             <button
@@ -548,12 +548,12 @@ export function ComboClickBuilder() {
         </div>
       </header>
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="combo-click-builder-body flex flex-1 overflow-hidden">
         <aside
-          className="w-72 shrink-0 border-r border-zinc-800 overflow-y-auto flex flex-col"
+          className="combo-click-builder-palette-panel w-72 shrink-0 border-r border-zinc-800 overflow-y-auto flex flex-col"
           style={{ background: "oklch(0.10 0.012 260)" }}
         >
-          <div className="p-2 flex-1 overflow-y-auto">
+          <div className="combo-click-builder-palette-inner p-2 flex-1 overflow-y-auto">
             <p className="text-[10px] text-cyan-200 uppercase tracking-widest mb-2 font-mono border-b border-zinc-800 pb-1">
               ボタンパレット
             </p>
@@ -644,7 +644,7 @@ export function ComboClickBuilder() {
           </div>
         </aside>
 
-        <main className="flex-1 flex flex-col overflow-y-auto p-4 gap-4">
+        <main className="combo-click-builder-workspace flex-1 flex flex-col overflow-y-auto p-4 gap-4">
           <section className="panel-glow rounded-md bg-zinc-900/60 flex flex-col">
             <div className="flex items-center justify-between px-4 pt-3 pb-2 border-b border-zinc-800">
               <div className="flex items-center gap-2">
