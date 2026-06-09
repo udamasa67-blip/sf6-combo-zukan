@@ -1340,14 +1340,15 @@
 
   .combo-card h3 {
     font-family: "IBM Plex Mono", monospace;
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: oklch(0.95 0.01 65);
-    line-height: 1.45;
-    word-break: break-all;
-    height: 4.35em;
-    display: flex;
-    align-items: flex-start;
-    overflow: hidden;
+    line-height: 1.42;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    min-height: calc(1.42em * 4);
+    height: auto;
+    display: block;
+    overflow: visible;
     flex-shrink: 0;
     margin-bottom: 0.5rem;
     padding-top: 0.1em;
@@ -1355,9 +1356,18 @@
     position: relative;
   }
 
-   .combo-notation {
-    line-height: 1.6;
-    word-break: break-all;
+  .combo-notation {
+    line-height: 1.42;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    max-width: 100%;
+  }
+
+  .combo-notation > span {
+    display: block;
+    max-width: 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
   }
 
   /* ===== Token Tooltip ===== */
