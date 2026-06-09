@@ -111,6 +111,34 @@ const tokenTextColorMap: Record<string, string> = {
   "text-teal-200": "#99f6e4",
 };
 
+async function writeClipboardText(text: string) {
+  if (navigator.clipboard?.writeText && window.isSecureContext) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return;
+    } catch {
+      // Fall back for browsers that block Clipboard API in this context.
+    }
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "fixed";
+  textarea.style.left = "-9999px";
+  textarea.style.top = "0";
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+
+  const copied = document.execCommand("copy");
+  document.body.removeChild(textarea);
+
+  if (!copied) {
+    throw new Error("Copy command failed");
+  }
+}
+
 function getTokenVisualStyle(token: PaletteToken): CSSProperties {
   const borderColor = tokenBorderColorMap[token.border] ?? "#64748b";
   return {
@@ -415,7 +443,7 @@ export function ComboClickBuilder() {
     if (!notation) return;
 
     try {
-      await navigator.clipboard.writeText(notation);
+      await writeClipboardText(notation);
       setCopied(true);
       toast.success("コンボをコピーしました", {
         description: notation,
@@ -767,7 +795,7 @@ export function ComboClickBuilder() {
                     <button
                       onClick={async () => {
                         try {
-                          await navigator.clipboard.writeText(
+                          await writeClipboardText(
                             buildNotation(sc.entries, notationMode, directionMode)
                           );
                           toast.success(`「${sc.name}」をコピーしました`);
