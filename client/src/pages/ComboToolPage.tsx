@@ -34,12 +34,5 @@ export default function ComboToolPage() {
     canonical.href = window.location.origin + "/SF6_combo_tool";
   }, []);
 
-  return (
-    <main className="archive-home combo-tool-page">
-      <div className="combo-tool-page-nav">
-        <a href="/" className="combo-tool-back-link">Main Menu</a>
-      </div>
-      <ComboClickBuilder />
-    </main>
-  );
+  return <ComboClickBuilder />;
 }
