@@ -114,6 +114,13 @@ const tokenTextColorMap: Record<string, string> = {
 function getTokenVisualStyle(token: PaletteToken): CSSProperties {
   const borderColor = tokenBorderColorMap[token.border] ?? "#64748b";
   return {
+    display: "inline-flex",
+    flex: "0 0 auto",
+    width: "auto",
+    minWidth: "3.25rem",
+    minHeight: "2rem",
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: tokenColorMap[token.color] ?? "#1f2937",
     border: "1px solid " + borderColor,
     color: tokenTextColorMap[token.textColor] ?? "#f8fafc",
@@ -628,7 +635,18 @@ export function ComboClickBuilder() {
               </div>
             </div>
 
-            <div className="builder-combo-sequence" style={{ minHeight: "8rem" }}>
+            <div
+              className="builder-combo-sequence"
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "wrap",
+                alignContent: "flex-start",
+                alignItems: "center",
+                gap: "0.4rem",
+                minHeight: "8rem",
+              }}
+            >
               {combo.length === 0 ? (
                 <div className="flex items-center justify-center w-full py-4">
                   <p className="text-zinc-400 text-sm font-mono">
