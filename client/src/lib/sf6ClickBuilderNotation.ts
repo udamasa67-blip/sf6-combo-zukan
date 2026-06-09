@@ -60,8 +60,9 @@ export function formatTokenNotation(
   token: PaletteToken,
   mode: NotationMode,
   directionMode: DirectionNotationMode = "arrow",
+  forceNumberDirection = false,
 ): string {
-  const baseNotation = directionMode === "number"
+  const baseNotation = directionMode === "number" || forceNumberDirection
     ? getNumberNotation(token)
     : token.notation;
 
@@ -195,10 +196,21 @@ export function buildNotation(
   mode: NotationMode = "en",
   directionMode: DirectionNotationMode = "arrow",
 ): string {
+  let insideBracket = false;
+
   return entries
     .map((e) => {
       const token = TOKEN_MAP[e.tokenId];
-      return token ? formatTokenNotation(token, mode, directionMode) : toArrowNotation(e.tokenId);
+      const forceNumberDirection = insideBracket &&
+        (token?.kind === "direction" || token?.kind === "motion");
+      const notation = token
+        ? formatTokenNotation(token, mode, directionMode, forceNumberDirection)
+        : toArrowNotation(e.tokenId);
+
+      if (e.tokenId === "[") insideBracket = true;
+      if (e.tokenId === "]") insideBracket = false;
+
+      return notation;
     })
     .join("");
 }

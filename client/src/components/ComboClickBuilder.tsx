@@ -1,4 +1,4 @@
-import { useCallback, useState, type CSSProperties, type ReactNode } from "react";
+import { useCallback, useMemo, useState, type CSSProperties, type ReactNode } from "react";
 import { toast } from "sonner";
 import {
   ATTACK_TOKENS,
@@ -253,6 +253,7 @@ function ComboChip({
   isDragOver,
   notationMode,
   directionMode,
+  forceNumberDirection,
 }: {
   entry: ComboEntry;
   index: number;
@@ -264,6 +265,7 @@ function ComboChip({
   isDragOver: boolean;
   notationMode: NotationMode;
   directionMode: DirectionNotationMode;
+  forceNumberDirection: boolean;
 }) {
   const token = TOKEN_MAP[entry.tokenId];
   if (!token) return null;
@@ -290,7 +292,7 @@ function ComboChip({
       } ${isDragOver ? "drag-over" : ""}`}
       style={{ ...getTokenVisualStyle(token), animationDelay: `${Math.min(index * 20, 200)}ms` }}
     >
-      <span>{formatTokenNotation(token, notationMode, directionMode).trim()}</span>
+      <span>{formatTokenNotation(token, notationMode, directionMode, forceNumberDirection).trim()}</span>
       <button
         onClick={(e) => { e.stopPropagation(); onRemove(entry.uid); }}
         className="ml-1 opacity-0 group-hover:opacity-100 transition-opacity duration-100 text-xs leading-none hover:text-red-400 active:scale-90"
@@ -372,6 +374,19 @@ export function ComboClickBuilder() {
     setDragOverUid(null);
     toast.success("コンボを並び替えました");
   }, [draggedUid]);
+
+  const bracketContextByUid = useMemo(() => {
+    const context = new Map<string, boolean>();
+    let insideBracket = false;
+
+    combo.forEach((entry) => {
+      context.set(entry.uid, insideBracket);
+      if (entry.tokenId === "[") insideBracket = true;
+      if (entry.tokenId === "]") insideBracket = false;
+    });
+
+    return context;
+  }, [combo]);
 
   const notation = buildNotation(combo, notationMode, directionMode);
 
@@ -667,6 +682,7 @@ export function ComboClickBuilder() {
                     isDragOver={dragOverUid === entry.uid}
                     notationMode={notationMode}
                     directionMode={directionMode}
+                    forceNumberDirection={bracketContextByUid.get(entry.uid) ?? false}
                   />
                 ))
               )}
