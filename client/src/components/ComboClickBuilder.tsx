@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, type CSSProperties, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { toast } from "sonner";
 import {
   ATTACK_TOKENS,
@@ -350,6 +350,8 @@ export function ComboClickBuilder() {
   const [directionMode, setDirectionMode] = useState<DirectionNotationMode>("arrow");
   const [draggedUid, setDraggedUid] = useState<string | null>(null);
   const [dragOverUid, setDragOverUid] = useState<string | null>(null);
+  const sequencePanelRef = useRef<HTMLElement | null>(null);
+  const [mobileSequenceHeight, setMobileSequenceHeight] = useState(176);
 
   const addToken = useCallback((tokenId: string) => {
     setCombo((prev) => [...prev, { uid: createBuilderId(), tokenId }]);
@@ -459,8 +461,34 @@ export function ComboClickBuilder() {
     ["j", "cr", "st"].includes(t.id)
   );
 
+  useEffect(() => {
+    const panel = sequencePanelRef.current;
+    if (!panel || typeof window === "undefined") return;
+
+    const updateHeight = () => {
+      if (!window.matchMedia("(max-width: 640px)").matches) return;
+      setMobileSequenceHeight(Math.ceil(panel.getBoundingClientRect().height));
+    };
+
+    updateHeight();
+    window.addEventListener("resize", updateHeight);
+
+    const resizeObserver = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(updateHeight);
+    resizeObserver?.observe(panel);
+
+    return () => {
+      window.removeEventListener("resize", updateHeight);
+      resizeObserver?.disconnect();
+    };
+  }, [combo.length, directionMode, notationMode]);
+
+  const builderStyle = {
+    fontFamily: "'Space Grotesk', sans-serif",
+    "--mobile-sequence-height": `${mobileSequenceHeight}px`,
+  } as CSSProperties;
+
   return (
-    <div className="combo-click-builder min-h-screen bg-background flex flex-col" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+    <div className="combo-click-builder min-h-screen bg-background flex flex-col" style={builderStyle}>
       <header className="combo-click-builder-header border-b border-zinc-800 px-4 py-2 flex items-center gap-2 shrink-0">
         <div className="flex items-center gap-1.5">
           <div
@@ -645,7 +673,7 @@ export function ComboClickBuilder() {
         </aside>
 
         <main className="combo-click-builder-workspace flex-1 flex flex-col overflow-y-auto p-4 gap-4">
-          <section className="combo-click-builder-sequence-panel panel-glow rounded-md bg-zinc-900/60 flex flex-col">
+          <section ref={sequencePanelRef} className="combo-click-builder-sequence-panel panel-glow rounded-md bg-zinc-900/60 flex flex-col">
             <div className="flex items-center justify-between px-4 pt-3 pb-2 border-b border-zinc-800">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-semibold tracking-widest uppercase text-cyan-200 font-mono">

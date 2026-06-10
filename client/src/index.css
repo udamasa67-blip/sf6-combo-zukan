@@ -3099,7 +3099,7 @@
       width: 100%;
       max-width: 100vw;
       overflow-x: hidden;
-      padding-top: calc(26.25rem + env(safe-area-inset-top, 0px));
+      padding-top: var(--mobile-sequence-height, 11rem);
     }
 
     .combo-click-builder-header {
