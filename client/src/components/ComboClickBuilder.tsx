@@ -645,7 +645,7 @@ export function ComboClickBuilder() {
         </aside>
 
         <main className="combo-click-builder-workspace flex-1 flex flex-col overflow-y-auto p-4 gap-4">
-          <section className="panel-glow rounded-md bg-zinc-900/60 flex flex-col">
+          <section className="combo-click-builder-sequence-panel panel-glow rounded-md bg-zinc-900/60 flex flex-col">
             <div className="flex items-center justify-between px-4 pt-3 pb-2 border-b border-zinc-800">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-semibold tracking-widest uppercase text-cyan-200 font-mono">
