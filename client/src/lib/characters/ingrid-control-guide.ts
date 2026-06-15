@@ -49,9 +49,9 @@ export const ingridControlGuide: ControlGuide = {
     },
     {
       name: 'サンライズ',
-      notation: '623LP/MP/HP',
+      notation: '236LK/MK/HK',
       type: 'special',
-      description: '回転しながら攻撃する技。弱版は対空技、中版はコンボパーツ、強版は発生は遅いがヒット後に追撃可能。弱・中・強すべてがモダン操作で使用可能です。'
+      description: '回転しながら攻撃する技。弱版は対空技、中版はコンボパーツ、強版は発生は遅いがヒット後に追撃可能。LK・MK・HKすべてがモダン操作で使用可能です。'
     },
     {
       name: 'サンヴェール',
