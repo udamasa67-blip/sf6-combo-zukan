@@ -11,7 +11,8 @@
     "check": "tsc --noEmit",
     "video:optimize": "node scripts/optimize-combo-video.mjs",
     "format": "prettier --write .",
-    "sitemap": "node scripts/generate-sitemap.mjs"
+    "sitemap": "node scripts/generate-sitemap.mjs",
+    "combo:draft": "node scripts/draft-combo-from-video.mjs"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
