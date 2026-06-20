@@ -748,13 +748,18 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
   const isSa2BranchCombo = (combo: Combo) => normalizeSearchText(combo.route).includes("sa2");
   const isSunflareCombo = (combo: Combo) => combo.starter.includes("サンフレア") || combo.postPatchNote.includes("サンフレア");
   const starterCandidateComboIdSet = starterCandidateComboIds ? new Set(starterCandidateComboIds) : null;
+  const starterCandidateOrder = starterCandidateComboIds
+    ? new Map(starterCandidateComboIds.map((comboId, index) => [comboId, index]))
+    : null;
   const baseVisibleCombos = setupSourceCombo
     ? singleLinkedComboId
       ? singleLinkedComboId === setupSourceCombo.id
         ? []
         : sortedCombos.filter((combo) => combo.id === singleLinkedComboId)
       : starterCandidateComboIdSet
-        ? sortedCombos.filter((combo) => combo.id !== setupSourceCombo.id && starterCandidateComboIdSet.has(combo.id))
+        ? combos
+            .filter((combo) => combo.id !== setupSourceCombo.id && starterCandidateComboIdSet.has(combo.id))
+            .sort((a, b) => (starterCandidateOrder?.get(a.id) ?? 0) - (starterCandidateOrder?.get(b.id) ?? 0))
       : sortedCombos.filter((combo) => combo.id !== setupSourceCombo.id)
     : sortedCombos;
   const shouldShowIngridSa2BranchCard = isIngridStep1BranchView && !showIngridSa2Branches && baseVisibleCombos.some(isSa2BranchCombo);

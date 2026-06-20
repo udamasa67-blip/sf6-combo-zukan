@@ -792,7 +792,7 @@ const ingridConfig: CharacterConfig = {
     {
       comboId: 51,
       filterPurpose: "SA2",
-      candidateComboIds: [48, 49, 50, 51, 52, 53],
+      candidateComboIds: [51, 52, 53, 48, 49, 50],
       note: "SA2を使用し攻め継続・画面端からの脱出などストックを増やし状況を好転させる",
     },
   ],
