@@ -53,7 +53,9 @@ type Combo = {
 type BeginnerStepItem = {
   combo: Combo;
   note?: string;
+  description?: string;
   filterPurpose?: string;
+  candidateComboIds?: number[];
   starterDamageMin?: number;
   useSetupFrame?: boolean;
 };
@@ -354,6 +356,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
   const [setupSourceComboId, setSetupSourceComboId] = useState<number | null>(null);
   const [singleLinkedComboId, setSingleLinkedComboId] = useState<number | null>(null);
   const [singleLinkReturn, setSingleLinkReturn] = useState<{ comboId: number; purpose: string } | null>(null);
+  const [starterCandidateComboIds, setStarterCandidateComboIds] = useState<number[] | null>(null);
   const [starterDamageMinFilter, setStarterDamageMinFilter] = useState<number | null>(null);
   const [showIngridSa2Branches, setShowIngridSa2Branches] = useState(false);
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
@@ -615,6 +618,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
       setSetupSourceComboId(singleLinkReturn.comboId);
       setSingleLinkedComboId(null);
       setSingleLinkReturn(null);
+      setStarterCandidateComboIds(null);
       setStarterDamageMinFilter(null);
       setShowIngridSa2Branches(false);
       return;
@@ -624,6 +628,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
     setSetupSourceComboId(null);
     setSingleLinkedComboId(null);
     setSingleLinkReturn(null);
+    setStarterCandidateComboIds(null);
     setStarterDamageMinFilter(null);
     setShowIngridSa2Branches(false);
 
@@ -646,6 +651,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
     setSetupSourceComboId(comboId);
     setSingleLinkedComboId(null);
     setSingleLinkReturn(null);
+    setStarterCandidateComboIds(null);
     setStarterDamageMinFilter(null);
     setShowIngridSa2Branches(false);
     window.setTimeout(() => {
@@ -661,12 +667,28 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
     setMaxDrive(6);
     setActiveTab("all");
 
+    if (step.candidateComboIds?.length) {
+      setSelectedPurpose("すべて");
+      setSetupFrameFilter(null);
+      setSetupSourceComboId(combo.id);
+      setSingleLinkedComboId(null);
+      setSingleLinkReturn(null);
+      setStarterCandidateComboIds(step.candidateComboIds);
+      setStarterDamageMinFilter(null);
+      setShowIngridSa2Branches(false);
+      window.setTimeout(() => {
+        document.getElementById("combos")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 0);
+      return;
+    }
+
     if (step.filterPurpose) {
       setSelectedPurpose(step.filterPurpose);
       setSetupFrameFilter(null);
       setSetupSourceComboId(combo.id);
       setSingleLinkedComboId(null);
       setSingleLinkReturn(null);
+      setStarterCandidateComboIds(null);
       setStarterDamageMinFilter(step.starterDamageMin ?? null);
       setShowIngridSa2Branches(false);
       window.setTimeout(() => {
@@ -680,6 +702,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
       setSetupSourceComboId(combo.id);
       setSingleLinkedComboId(null);
       setSingleLinkReturn(null);
+      setStarterCandidateComboIds(null);
       setStarterDamageMinFilter(null);
       setShowIngridSa2Branches(false);
       return;
@@ -689,6 +712,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
     setSetupSourceComboId(null);
     setSingleLinkedComboId(null);
     setSingleLinkReturn(null);
+    setStarterCandidateComboIds(null);
     setStarterDamageMinFilter(step.starterDamageMin ?? 5000);
     setShowIngridSa2Branches(false);
   };
@@ -708,6 +732,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
     setSetupSourceComboId(sourceComboId);
     setSingleLinkedComboId(comboId);
     setSingleLinkReturn(returnTarget ?? null);
+    setStarterCandidateComboIds(null);
     setStarterDamageMinFilter(null);
     setShowIngridSa2Branches(false);
     window.setTimeout(() => {
@@ -722,11 +747,14 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
   const isIngridStep2BranchView = resolvedConfig.id === "ingrid" && setupSourceCombo?.id === 26 && selectedPurpose === "起き攻め" && !singleLinkedComboId;
   const isSa2BranchCombo = (combo: Combo) => normalizeSearchText(combo.route).includes("sa2");
   const isSunflareCombo = (combo: Combo) => combo.starter.includes("サンフレア") || combo.postPatchNote.includes("サンフレア");
+  const starterCandidateComboIdSet = starterCandidateComboIds ? new Set(starterCandidateComboIds) : null;
   const baseVisibleCombos = setupSourceCombo
     ? singleLinkedComboId
       ? singleLinkedComboId === setupSourceCombo.id
         ? []
         : sortedCombos.filter((combo) => combo.id === singleLinkedComboId)
+      : starterCandidateComboIdSet
+        ? sortedCombos.filter((combo) => combo.id !== setupSourceCombo.id && starterCandidateComboIdSet.has(combo.id))
       : sortedCombos.filter((combo) => combo.id !== setupSourceCombo.id)
     : sortedCombos;
   const shouldShowIngridSa2BranchCard = isIngridStep1BranchView && !showIngridSa2Branches && baseVisibleCombos.some(isSa2BranchCombo);
@@ -753,7 +781,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
       routeNotationMode,
     );
 
-  const visibleComboSignature = `${setupSourceCombo?.id ?? ""}|${visibleCombos.map((combo) => combo.id).join(",")}|${showIngridSa2Branches ? "branches" : "base"}`;
+  const visibleComboSignature = `${setupSourceCombo?.id ?? ""}|${visibleCombos.map((combo) => combo.id).join(",")}|${showIngridSa2Branches ? "branches" : "base"}|${starterCandidateComboIds?.join(",") ?? ""}`;
 
   useEffect(() => {
     const grid = comboGridRef.current;
@@ -981,7 +1009,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
                 <strong>#{combo.id.toString().padStart(2, "0")} {combo.starter}</strong>
                 <em>{combo.purpose}</em>
               </div>
-              <p>{combo.postPatchNote}</p>
+              <p>{step.description ?? combo.postPatchNote}</p>
               <div className="starter-combo-metrics">
                 <span>ダメージ <b>{combo.damageLabel || combo.damage}</b></span>
                 <span>有利 <b>{combo.knockdown}</b></span>

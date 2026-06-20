@@ -772,7 +772,7 @@ const ingridConfig: CharacterConfig = {
   seoTitle: "SF6 イングリッド コンボ集｜ストック・起き攻め・リーサル検索",
   seoDescription:
     "SF6 イングリッドのコンボ集。ストック・起き攻め・リーサルを検索できます。",
-  beginnerComboIds: [34, 26, 37],
+  beginnerComboIds: [34, 26, 37, 51],
   beginnerSteps: [
     {
       comboId: 34,
@@ -788,6 +788,12 @@ const ingridConfig: CharacterConfig = {
       comboId: 37,
       filterPurpose: "リーサル",
       note: "スタン・壁やられ・インパクト後・サンフレアヒット後などリーサルが確定する状況を理解する",
+    },
+    {
+      comboId: 51,
+      filterPurpose: "SA2",
+      candidateComboIds: [48, 49, 50, 51, 52, 53],
+      note: "SA2を使用し攻め継続・画面端からの脱出などストックを増やし状況を好転させる",
     },
   ],
 

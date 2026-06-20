@@ -17,7 +17,9 @@ export interface CharacterConfig {
   beginnerSteps?: Array<{                 // START HERE専用設定
     comboId: number;
     note?: string;
+    description?: string;
     filterPurpose?: string;
+    candidateComboIds?: number[];
     starterDamageMin?: number;
     useSetupFrame?: boolean;
   }>;
