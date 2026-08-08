@@ -661,7 +661,7 @@
 
   .starter-combo-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1rem;
     max-width: 1400px;
     margin: 0 auto;
@@ -1473,18 +1473,18 @@
   }
 
   .combo-metrics.has-stock {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .combo-metrics.has-stock .metric-damage,
   .combo-metrics.has-stock .metric-knockdown {
-    grid-column: span 3;
+    grid-column: auto;
   }
 
   .combo-metrics.has-stock .metric-super,
   .combo-metrics.has-stock .metric-stock,
   .combo-metrics.has-stock .metric-drive {
-    grid-column: span 2;
+    grid-column: auto;
   }
 
   .combo-metrics.has-stock small {

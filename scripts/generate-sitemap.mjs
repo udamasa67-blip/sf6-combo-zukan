@@ -9,6 +9,7 @@ const routes = [
   { path: "/", priority: "1.0" },
   { path: "/elena", priority: "0.9" },
   { path: "/ingrid", priority: "0.9" },
+  { path: "/yasmine", priority: "0.9" },
 ];
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>

@@ -5,6 +5,7 @@
 
 import { elenaControlGuide } from './characters/elena-control-guide';
 import { ingridControlGuide } from './characters/ingrid-control-guide';
+import { yasmineControlGuide } from './characters/yasmine-control-guide';
 import { ControlGuide, LimitedTechnique, UnavailableTechnique } from './controlGuideData';
 
 export interface MoveSearchResult {
@@ -246,6 +247,8 @@ function getControlGuideByCharacter(characterId: string): ControlGuide | null {
       return elenaControlGuide;
     case 'ingrid':
       return ingridControlGuide;
+    case 'yasmine':
+      return yasmineControlGuide;
     default:
       return null;
   }

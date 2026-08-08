@@ -15,6 +15,7 @@ import CharacterPage from "./pages/CharacterPage";
 import ComboToolPage from "./pages/ComboToolPage";
 import "./lib/characters/elena";
 import "./lib/characters/ingrid";
+import "./lib/characters/yasmine";
 
 function AnalyticsTracker() {
   const [location] = useLocation();
@@ -33,6 +34,7 @@ function Router() {
       <Route path="/" component={ArchiveHome} />
       <Route path="/elena" component={() => <CharacterPage characterId="elena" />} />
       <Route path="/ingrid" component={() => <CharacterPage characterId="ingrid" />} />
+      <Route path="/yasmine" component={() => <CharacterPage characterId="yasmine" />} />
       <Route path="/SF6_combo_tool" component={ComboToolPage} />
       <Route path="/sf6_combo_tool" component={ComboToolPage} />
       <Route path="/404" component={NotFound} />

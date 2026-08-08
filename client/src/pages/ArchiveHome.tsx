@@ -44,6 +44,8 @@ export default function ArchiveHome() {
   const elenaVideoCount = countVideos("elena");
   const ingridComboCount = getCharacterConfig("ingrid")?.combos.length ?? 0;
   const ingridVideoCount = countVideos("ingrid");
+  const yasmineComboCount = getCharacterConfig("yasmine")?.combos.length ?? 0;
+  const yasmineVideoCount = countVideos("yasmine");
 
   return (
     <main className="archive-home">
@@ -61,7 +63,7 @@ export default function ArchiveHome() {
         </div>
 
         <div className="archive-status-strip" aria-label="公開状況">
-          <span>公開中: エレナ / イングリッド</span>
+          <span>公開中: エレナ / イングリッド / ヤスミン</span>
         </div>
       </section>
 
@@ -108,6 +110,25 @@ export default function ArchiveHome() {
               </div>
             </dl>
             <span className="archive-card-action">イングリッドを見る</span>
+          </a>
+
+          <a className="archive-character-card available" href="/yasmine" aria-label="ヤスミン">
+            <div className="archive-card-main">
+              <span className="archive-card-status">準備中</span>
+              <h3>ヤスミン</h3>
+              <p>コンボカード追加に向けて、起き攻め・リーサル・Drive消費を整理できるページ構成を準備しています。</p>
+            </div>
+            <dl className="archive-card-stats">
+              <div>
+                <dt>Combos</dt>
+                <dd>{yasmineComboCount}</dd>
+              </div>
+              <div>
+                <dt>Videos</dt>
+                <dd>{yasmineVideoCount}</dd>
+              </div>
+            </dl>
+            <span className="archive-card-action">ヤスミンを見る</span>
           </a>
         </div>
       </section>

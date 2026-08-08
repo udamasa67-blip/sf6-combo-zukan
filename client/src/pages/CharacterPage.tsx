@@ -18,6 +18,7 @@ import { ControlGuide } from "@/components/ControlGuide";
 import { ComboVideo } from "@/components/ComboVideo";
 import { elenaControlGuide } from "@/lib/characters/elena-control-guide";
 import { ingridControlGuide } from "@/lib/characters/ingrid-control-guide";
+import { yasmineControlGuide } from "@/lib/characters/yasmine-control-guide";
 import {
   canFilterSetupFrame,
   formatComboRouteForDisplay,
@@ -367,6 +368,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
   // 操作方式ガイドを取得
   const getControlGuide = () => {
     if (characterId === "ingrid") return ingridControlGuide;
+    if (characterId === "yasmine") return yasmineControlGuide;
     return elenaControlGuide;
   };
   const controlGuide = getControlGuide();
@@ -468,7 +470,12 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
     [resolvedConfig.combos]
   );
 
-  const shouldShowStock = resolvedConfig.id === "ingrid";
+  const shouldShowStock = resolvedConfig.id === "ingrid" || resolvedConfig.id === "yasmine";
+  const stockLabel = resolvedConfig.id === "yasmine" ? "バヤニ・モード" : "ストック";
+  const formatStockValue = (stock?: string) => {
+    if (resolvedConfig.id === "yasmine") return stock || "なし";
+    return stock || "0";
+  };
 
   const beginnerSteps = useMemo<BeginnerStepItem[]>(() => {
     if (resolvedConfig.beginnerSteps?.length) {
@@ -530,6 +537,8 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
         normalizeSearchText(combo.position).includes(normalizedSearch) ||
         normalizeSearchText(combo.purpose).includes(normalizedSearch) ||
         normalizeSearchText(combo.knockdown).includes(normalizedSearch) ||
+        normalizeSearchText(stockLabel).includes(normalizedSearch) ||
+        normalizeSearchText(formatStockValue(combo.stock)).includes(normalizedSearch) ||
         normalizeSearchText(combo.postPatchNote).includes(normalizedSearch);
       const favoriteMatch = activeTab !== "favorites" || favorites.includes(combo.id);
 
@@ -545,7 +554,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
 
       return positionMatch && purposeMatch && driveMatch && searchMatch && favoriteMatch && controlSchemeMatch && setupFrameMatch && starterDamageMatch;
     });
-  }, [combos, selectedPosition, selectedPurpose, maxDrive, searchQuery, activeTab, favorites, selectedControlScheme, resolvedConfig.id, setupFrameFilter, starterDamageMinFilter]);
+  }, [combos, selectedPosition, selectedPurpose, maxDrive, searchQuery, activeTab, favorites, selectedControlScheme, resolvedConfig.id, setupFrameFilter, starterDamageMinFilter, stockLabel]);
 
   const searchViability = useMemo(() => {
     if (selectedControlScheme !== "modern" || !searchQuery.trim()) return null;
@@ -949,7 +958,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
           )}
         </span>
         <span className="metric-super"><small>SAゲージ消費</small><strong>{combo.super}</strong></span>
-        {shouldShowStock && <span className="metric-stock"><small>ストック</small><strong>{combo.stock || "0"}</strong></span>}
+        {shouldShowStock && <span className="metric-stock"><small>{stockLabel}</small><strong>{formatStockValue(combo.stock)}</strong></span>}
         <span className="metric-drive"><small>ドライブゲージ消費</small><strong>{formatDriveGaugeConsumption(combo)}</strong></span>
       </div>
       {renderComboDescription(combo)}
@@ -981,6 +990,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
               <div className="character-links">
                 <a href="/elena" className={`character-link ${characterId === "elena" || !characterId ? "active" : ""}`}>エレナ</a>
                 <a href="/ingrid" className={`character-link ${characterId === "ingrid" ? "active" : ""}`}>イングリッド</a>
+                <a href="/yasmine" className={`character-link ${characterId === "yasmine" ? "active" : ""}`}>ヤスミン</a>
               </div>
             </div>
           </article>
@@ -1193,7 +1203,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
                         )}
                       </span>
                       <span className="metric-super"><small>SAゲージ消費</small><strong>{setupSourceCombo.super}</strong></span>
-                      {shouldShowStock && <span className="metric-stock"><small>ストック</small><strong>{setupSourceCombo.stock || "0"}</strong></span>}
+                      {shouldShowStock && <span className="metric-stock"><small>{stockLabel}</small><strong>{formatStockValue(setupSourceCombo.stock)}</strong></span>}
                       <span className="metric-drive"><small>ドライブゲージ消費</small><strong>{formatDriveGaugeConsumption(setupSourceCombo)}</strong></span>
                     </div>
                     {renderComboDescription(setupSourceCombo)}
