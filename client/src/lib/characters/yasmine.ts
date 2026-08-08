@@ -278,7 +278,7 @@ const yasmineCombosRaw: Omit<ComboData, "driveConsumption" | "superConsumption">
     startup: "セットプレイ",
     notation: "（空中） > 5HP xx 22MP > 投げ",
     damage: 1200,
-    knockdown: "+47",
+    knockdown: "+29",
     position: "端",
     difficulty: "易",
     stock: "あり",
