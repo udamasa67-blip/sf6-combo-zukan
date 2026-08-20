@@ -877,9 +877,14 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
       }
 
       const matchedText = match[0];
-      const linkedComboIds = match[1]
-        ? [...match[1].matchAll(/#(\d+)/g)].map((item) => Number(item[1]))
-        : [];
+      const linkedComboIds: number[] = [];
+      if (match[1]) {
+        const groupedLinkPattern = /#(\d+)/g;
+        let groupedMatch: RegExpExecArray | null;
+        while ((groupedMatch = groupedLinkPattern.exec(match[1])) !== null) {
+          linkedComboIds.push(Number(groupedMatch[1]));
+        }
+      }
       const validLinkedComboIds = linkedComboIds.filter((comboId) => combos.some((item) => item.id === comboId));
       const derivedComboId = match[2] ? Number(match[2]) : null;
 
