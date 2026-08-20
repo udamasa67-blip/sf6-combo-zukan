@@ -573,6 +573,10 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
 
   const canOpenSetupFrame = (combo: Pick<Combo, "knockdown">): combo is Pick<Combo, "knockdown"> & { knockdown: SetupFrameFilter } =>
     canFilterSetupFrame(combo.knockdown) && availableSetupFrames.has(combo.knockdown);
+  const canOpenComboSetupFrame = (combo: Combo) => {
+    if (!canOpenSetupFrame(combo)) return false;
+    return !(resolvedConfig.id === "yasmine" && combo.knockdown === "+19" && (combo.id === 1 || combo.id === 11 || combo.id === 24));
+  };
 
   // ソート
   const sortedCombos = useMemo(() => {
@@ -593,11 +597,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
           return bEff - aEff;
         });
       case "patch":
-        return sorted.sort((a, b) => {
-          if (a.isPatchImpacted && !b.isPatchImpacted) return -1;
-          if (!a.isPatchImpacted && b.isPatchImpacted) return 1;
-          return 0;
-        });
+        return sorted.sort((a, b) => a.id - b.id);
       default:
         return sorted;
     }
@@ -749,6 +749,24 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
     }, 0);
   };
 
+  const applyComboDescriptionCandidateLinks = (comboIds: number[], sourceComboId: number) => {
+    setSelectedPosition("すべて");
+    setSelectedPurpose("すべて");
+    setSearchQuery("");
+    setMaxDrive(6);
+    setActiveTab("all");
+    setSetupFrameFilter(null);
+    setSetupSourceComboId(sourceComboId);
+    setSingleLinkedComboId(null);
+    setSingleLinkReturn(null);
+    setStarterCandidateComboIds(comboIds);
+    setStarterDamageMinFilter(null);
+    setShowIngridSa2Branches(false);
+    window.setTimeout(() => {
+      document.getElementById("combos")?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 0);
+  };
+
   const setupSourceCombo = setupSourceComboId
     ? combos.find((combo) => combo.id === setupSourceComboId) ?? null
     : null;
@@ -849,7 +867,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
 
   const renderComboDescription = (combo: Combo) => {
     const parts: ReactNode[] = [];
-    const linkPattern = /#(\d+)の派生|インパクト返し可/g;
+    const linkPattern = /((?:#\d+){2,})(?:の派生)?|#(\d+)(?:の派生)?|インパクト返し可/g;
     let lastIndex = 0;
     let match: RegExpExecArray | null;
 
@@ -859,8 +877,24 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
       }
 
       const matchedText = match[0];
-      const derivedComboId = match[1] ? Number(match[1]) : null;
-      if (derivedComboId && combos.some((item) => item.id === derivedComboId)) {
+      const linkedComboIds = match[1]
+        ? [...match[1].matchAll(/#(\d+)/g)].map((item) => Number(item[1]))
+        : [];
+      const validLinkedComboIds = linkedComboIds.filter((comboId) => combos.some((item) => item.id === comboId));
+      const derivedComboId = match[2] ? Number(match[2]) : null;
+
+      if (validLinkedComboIds.length > 1) {
+        parts.push(
+          <button
+            key={`derived-group-${combo.id}-${validLinkedComboIds.join("-")}-${match.index}`}
+            type="button"
+            className="combo-description-link"
+            onClick={() => applyComboDescriptionCandidateLinks(validLinkedComboIds, combo.id)}
+          >
+            {matchedText}
+          </button>
+        );
+      } else if (derivedComboId && combos.some((item) => item.id === derivedComboId)) {
         parts.push(
           <button
             key={`derived-${combo.id}-${derivedComboId}-${match.index}`}
@@ -932,7 +966,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
   };
 
   const renderComboCard = (combo: Combo) => (
-    <article id={`combo-card-${combo.id}`} key={combo.id} className={`combo-card ${canOpenSetupFrame(combo) ? "has-next-card" : ""}`}>
+    <article id={`combo-card-${combo.id}`} key={combo.id} className={`combo-card ${canOpenComboSetupFrame(combo) ? "has-next-card" : ""}`}>
       <div className="combo-topline">
         <span>#{combo.id.toString().padStart(2, "0")}</span>
         <b>{combo.position}</b>
@@ -945,7 +979,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
         <span className="metric-damage"><small>ダメージ</small><strong>{combo.damageLabel || combo.damage}</strong></span>
         <span className="metric-knockdown">
           <small>有利フレーム</small>
-          {canOpenSetupFrame(combo) ? (
+          {canOpenComboSetupFrame(combo) ? (
             <button
               type="button"
               className={`setup-frame-link ${setupFrameFilter === combo.knockdown ? "active" : ""}`}
@@ -1096,7 +1130,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
                 <option value="damage">ダメージ高い順</option>
                 <option value="knockdown">起き攻め有利順</option>
                 <option value="efficiency">ゲージ効率順</option>
-                <option value="patch">パッチ影響順</option>
+                <option value="patch">更新順</option>
               </select>
             </label>
 
@@ -1177,7 +1211,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
               </div>
               <div ref={comboGridRef} className={setupSourceCombo ? `setup-route-board ${setupRouteSizeClass}` : "combo-grid"}>
                 {setupSourceCombo && (
-                  <article id={`combo-card-${setupSourceCombo.id}`} className={`combo-card setup-origin-card ${canOpenSetupFrame(setupSourceCombo) ? "has-next-card" : ""}`}>
+                  <article id={`combo-card-${setupSourceCombo.id}`} className={`combo-card setup-origin-card ${canOpenComboSetupFrame(setupSourceCombo) ? "has-next-card" : ""}`}>
                     <div className="combo-topline">
                       <span>#{setupSourceCombo.id.toString().padStart(2, "0")}</span>
                       <b>{setupSourceCombo.position}</b>
@@ -1190,7 +1224,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
                       <span className="metric-damage"><small>ダメージ</small><strong>{setupSourceCombo.damageLabel || setupSourceCombo.damage}</strong></span>
                       <span className="metric-knockdown">
                         <small>有利フレーム</small>
-                        {canOpenSetupFrame(setupSourceCombo) ? (
+                        {canOpenComboSetupFrame(setupSourceCombo) ? (
                           <button
                             type="button"
                             className={`setup-frame-link ${setupFrameFilter === setupSourceCombo.knockdown ? "active" : ""}`}
