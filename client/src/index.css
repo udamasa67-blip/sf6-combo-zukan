@@ -1443,7 +1443,7 @@
 
   .combo-metrics {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.75rem;
     font-family: "Noto Sans JP", sans-serif;
     font-size: 0.92rem;
@@ -1456,6 +1456,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    min-width: 0;
   }
 
   .combo-metrics small {
@@ -1469,7 +1470,14 @@
     color: oklch(0.95 0.01 65);
     font-weight: 600;
     font-size: 1.04rem;
+    min-width: 0;
     white-space: nowrap;
+  }
+
+  .combo-metrics .metric-damage strong {
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+    white-space: normal;
   }
 
   .combo-metrics.has-stock {
