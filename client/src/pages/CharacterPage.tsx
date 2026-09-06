@@ -686,7 +686,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
       setStarterDamageMinFilter(null);
       setShowIngridSa2Branches(false);
       window.setTimeout(() => {
-        document.getElementById("combos")?.scrollIntoView({ behavior: "smooth", block: "center" });
+        document.getElementById("combos")?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 0);
       return;
     }
@@ -701,7 +701,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
       setStarterDamageMinFilter(step.starterDamageMin ?? null);
       setShowIngridSa2Branches(false);
       window.setTimeout(() => {
-        document.getElementById("combos")?.scrollIntoView({ behavior: "smooth", block: "center" });
+        document.getElementById("combos")?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 0);
       return;
     }
