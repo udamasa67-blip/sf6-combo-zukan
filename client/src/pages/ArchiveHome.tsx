@@ -112,11 +112,11 @@ export default function ArchiveHome() {
             <span className="archive-card-action">イングリッドを見る</span>
           </a>
 
-          <a className="archive-character-card available" href="/yasmine" aria-label="ヤスミン">
+          <a className="archive-character-card available" href="/yasmine/" aria-label="ヤスミン">
             <div className="archive-card-main">
-              <span className="archive-card-status">準備中</span>
+              <span className="archive-card-status">公開中</span>
               <h3>ヤスミン</h3>
-              <p>コンボカード追加に向けて、起き攻め・リーサル・Drive消費を整理できるページ構成を準備しています。</p>
+              <p>基本コンボ、起き攻め、SA2、バヤニ・モード、画面端セットプレイを動画付きで検索できます。</p>
             </div>
             <dl className="archive-card-stats">
               <div>

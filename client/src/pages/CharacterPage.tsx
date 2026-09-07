@@ -408,7 +408,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
       resolvedConfig.seoTitle ||
       `SF6 ${resolvedConfig.nameJp} コンボまとめ 2026 | ${resolvedConfig.title}`;
     const description = resolvedConfig.seoDescription || resolvedConfig.description;
-    const canonicalPath = `/${resolvedConfig.id}`;
+    const canonicalPath = resolvedConfig.id === "yasmine" ? "/yasmine/" : `/${resolvedConfig.id}`;
 
     if (window.location.pathname === "/" && resolvedConfig.id === "elena") {
       window.history.replaceState(null, "", canonicalPath);
@@ -429,11 +429,25 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
     };
 
     setMeta('meta[name="description"]', { name: "description", content: description });
+    if (resolvedConfig.seoKeywords?.length) {
+      setMeta('meta[name="keywords"]', {
+        name: "keywords",
+        content: resolvedConfig.seoKeywords.join(", "),
+      });
+    }
+    setMeta('meta[name="robots"]', {
+      name: "robots",
+      content: "index, follow, max-image-preview:large, max-video-preview:-1",
+    });
     setMeta('meta[property="og:title"]', { property: "og:title", content: title });
     setMeta('meta[property="og:description"]', { property: "og:description", content: description });
     setMeta('meta[property="og:type"]', { property: "og:type", content: "website" });
     setMeta('meta[property="og:url"]', { property: "og:url", content: `${window.location.origin}${canonicalPath}` });
+    setMeta('meta[property="og:locale"]', { property: "og:locale", content: "ja_JP" });
+    setMeta('meta[property="og:site_name"]', { property: "og:site_name", content: "SF6 コンボ図鑑【雅】" });
     setMeta('meta[name="twitter:card"]', { name: "twitter:card", content: "summary_large_image" });
+    setMeta('meta[name="twitter:title"]', { name: "twitter:title", content: title });
+    setMeta('meta[name="twitter:description"]', { name: "twitter:description", content: description });
 
     let canonical = document.head.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
     if (!canonical) {
@@ -442,6 +456,70 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
       document.head.appendChild(canonical);
     }
     canonical.href = `${window.location.origin}${canonicalPath}`;
+
+    const structuredData = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "CollectionPage",
+          "@id": `${window.location.origin}${canonicalPath}#webpage`,
+          url: `${window.location.origin}${canonicalPath}`,
+          name: title,
+          description,
+          inLanguage: "ja-JP",
+          isPartOf: {
+            "@type": "WebSite",
+            name: "SF6 コンボ図鑑【雅】",
+            url: `${window.location.origin}/`,
+          },
+          about: {
+            "@type": "Thing",
+            name: `${resolvedConfig.nameJp}（${resolvedConfig.name}）`,
+            description: `ストリートファイター6のキャラクター${resolvedConfig.nameJp}のコンボ攻略`,
+          },
+          mainEntity: {
+            "@type": "ItemList",
+            name: `${resolvedConfig.nameJp} コンボ一覧`,
+            numberOfItems: resolvedConfig.combos.length,
+            itemListElement: resolvedConfig.combos.map((combo, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              name: `#${combo.number.toString().padStart(2, "0")} ${combo.title}`,
+              url: `${window.location.origin}${canonicalPath}#combo-card-${combo.number}`,
+            })),
+          },
+        },
+        {
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "SF6 コンボ図鑑",
+              item: `${window.location.origin}/`,
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: `${resolvedConfig.nameJp} コンボ攻略`,
+              item: `${window.location.origin}${canonicalPath}`,
+            },
+          ],
+        },
+      ],
+    };
+    let jsonLd = document.head.querySelector('script[data-character-structured-data]') as HTMLScriptElement | null;
+    if (!jsonLd) {
+      jsonLd = document.createElement("script");
+      jsonLd.type = "application/ld+json";
+      jsonLd.dataset.characterStructuredData = "true";
+      document.head.appendChild(jsonLd);
+    }
+    jsonLd.textContent = JSON.stringify(structuredData).replace(/</g, "\\u003c");
+
+    return () => {
+      jsonLd?.remove();
+    };
   }, [resolvedConfig]);
 
   // Map comboData to Combo type
@@ -1018,7 +1096,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
           </nav>
 
           <article className="hero-content">
-            <h1>{resolvedConfig.name} COMBO DESK</h1>
+            <h1>{resolvedConfig.name.toUpperCase()} COMBO DESK</h1>
             <p>{resolvedConfig.description}</p>
             <div className="hero-actions">
               <a href="#starter-combos" className="cta-button">まず覚えるコンボ</a>
@@ -1029,7 +1107,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
               <div className="character-links">
                 <a href="/elena" className={`character-link ${characterId === "elena" || !characterId ? "active" : ""}`}>エレナ</a>
                 <a href="/ingrid" className={`character-link ${characterId === "ingrid" ? "active" : ""}`}>イングリッド</a>
-                <a href="/yasmine" className={`character-link ${characterId === "yasmine" ? "active" : ""}`}>ヤスミン</a>
+                <a href="/yasmine/" className={`character-link ${characterId === "yasmine" ? "active" : ""}`}>ヤスミン</a>
               </div>
             </div>
           </article>

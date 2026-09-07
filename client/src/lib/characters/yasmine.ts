@@ -740,9 +740,19 @@ const yasmineConfig: CharacterConfig = {
   nameJp: "ヤスミン",
   title: "YASMINE COMBO DESK",
   subtitle: "2026年版",
-  seoTitle: "SF6 ヤスミン コンボ集｜起き攻め・リーサル・Drive効率検索",
+  seoTitle: "ヤスミン コンボ攻略｜SF6 起き攻め・SA2・バヤニ連携",
   seoDescription:
-    "SF6 ヤスミンのコンボ集。PC DI、差し返し、壁やられ、スタン、起き攻めルートを動画付きで整理。",
+    "ストリートファイター6（SF6）ヤスミンのコンボ攻略。基本コンボから起き攻め、SA2、バヤニ・モード、画面端セットプレイまで動画付きで検索できます。",
+  seoKeywords: [
+    "ヤスミン コンボ",
+    "SF6 ヤスミン",
+    "ストリートファイター6 ヤスミン",
+    "ヤスミン コンボ 攻略",
+    "ヤスミン 起き攻め",
+    "ヤスミン SA2",
+    "ヤスミン バヤニ・モード",
+    "ヤスミン モダン",
+  ],
   beginnerComboIds: [6, 17, 2],
   beginnerSteps: [
     {

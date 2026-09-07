@@ -13,6 +13,7 @@ export interface CharacterConfig {
   subtitle: string;                    // ページサブタイトル
   seoTitle?: string;                    // 検索結果向けタイトル
   seoDescription?: string;              // 検索結果向け説明文
+  seoKeywords?: string[];                // ページ内容を補足する関連検索語
   beginnerComboIds?: number[];          // 初見ユーザー向けのおすすめコンボ番号
   beginnerSteps?: Array<{                 // START HERE専用設定
     comboId: number;
