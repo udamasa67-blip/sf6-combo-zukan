@@ -44,6 +44,7 @@ type Combo = {
   purpose: string;
   postPatchNote: string;
   isPatchImpacted?: boolean;
+  isFeatured?: boolean;
   patchImpactType?: "rhino-horn" | "sa1" | "sa2" | "general";
   videoAsset?: ComboVideoAsset;
   videoReferences?: VideoReference[];
@@ -539,6 +540,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
         purpose: data.startup,
         postPatchNote: data.description,
         isPatchImpacted: (data as any).isPatchImpacted || false,
+        isFeatured: data.isFeatured || false,
         patchImpactType: (data as any).patchImpactType,
         videoAsset: data.videoAsset,
         videoReferences: data.videoReferences || [],
@@ -1049,7 +1051,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
   };
 
   const renderComboCard = (combo: Combo) => (
-    <article id={`combo-card-${combo.id}`} key={combo.id} className={`combo-card ${canOpenComboSetupFrame(combo) ? "has-next-card" : ""}`}>
+    <article id={`combo-card-${combo.id}`} key={combo.id} className={`combo-card ${combo.isFeatured ? "is-featured" : ""} ${canOpenComboSetupFrame(combo) ? "has-next-card" : ""}`}>
       <div className="combo-topline">
         <span>#{combo.id.toString().padStart(2, "0")}</span>
         <b>{combo.position}</b>
@@ -1294,7 +1296,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
               </div>
               <div ref={comboGridRef} className={setupSourceCombo ? `setup-route-board ${setupRouteSizeClass}` : "combo-grid"}>
                 {setupSourceCombo && (
-                  <article id={`combo-card-${setupSourceCombo.id}`} className={`combo-card setup-origin-card ${canOpenComboSetupFrame(setupSourceCombo) ? "has-next-card" : ""}`}>
+                  <article id={`combo-card-${setupSourceCombo.id}`} className={`combo-card setup-origin-card ${setupSourceCombo.isFeatured ? "is-featured" : ""} ${canOpenComboSetupFrame(setupSourceCombo) ? "has-next-card" : ""}`}>
                     <div className="combo-topline">
                       <span>#{setupSourceCombo.id.toString().padStart(2, "0")}</span>
                       <b>{setupSourceCombo.position}</b>

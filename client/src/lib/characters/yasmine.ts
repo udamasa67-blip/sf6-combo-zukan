@@ -722,6 +722,23 @@ const yasmineCombosRaw: Omit<ComboData, "driveConsumption" | "superConsumption">
     situationTags: ["セットプレイ"],
     videoAsset: comboVideoAsset("yasmine_50", "ヤスミン #50 バヤニ強ダロイSA2連携"),
   },
+  {
+    id: "combo_51",
+    number: 51,
+    title: "強ダロイ後セットプレイ",
+    startup: "起き攻め・セットプレイ",
+    notation: "2MK xx DRC > 2MP > 2HP xx 236HP~6P",
+    damage: 1836,
+    damageLabel: "1836+α",
+    knockdown: "+44",
+    position: "どこでも",
+    difficulty: "中",
+    stock: "なし",
+    isFeatured: true,
+    description: "バヤニなし時の強ダロイヒット後のセットプレイ各状況まとめ",
+    situationTags: ["起き攻め", "セットプレイ"],
+    videoAsset: comboVideoAsset("yasmine_51", "ヤスミン #51 強ダロイ後セットプレイ"),
+  },
 ];
 
 const yasmineCombos: ComboData[] = yasmineCombosRaw.map((combo) => {

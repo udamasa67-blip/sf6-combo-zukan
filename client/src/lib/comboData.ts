@@ -46,6 +46,7 @@ export interface ComboData {
   description: string;
   patchNote?: string;
   isPatchImpacted?: boolean;
+  isFeatured?: boolean;                    // 注目コンボとしてカードを強調表示
   patchImpactType?: "rhino-horn" | "sa1" | "sa2" | "general";
   videoAsset?: ComboVideoAsset;
   videoReferences?: VideoReference[];
