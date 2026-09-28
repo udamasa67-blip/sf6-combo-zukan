@@ -51,6 +51,11 @@ function App() {
           <Toaster />
           <AnalyticsTracker />
           <Router />
+          <footer className="archive-site-footer">
+            <p>SF6 コンボ図鑑【雅】</p>
+            <nav aria-label="運営案内"><a href="/">トップ</a><a href="/operator.html">運営情報</a><a href="/contact.html">お問い合わせ</a><a href="/privacy.html">プライバシー</a></nav>
+            <small>本サイトは個人運営の非公式攻略サイトです。ストリートファイター6の権利は各権利者に帰属します。</small>
+          </footer>
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>

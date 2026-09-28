@@ -7,6 +7,10 @@ const siteUrl = (explicitSiteUrl || vercelSiteUrl || "https://www.miyabi-combo.c
 const today = new Date().toISOString().slice(0, 10);
 const routes = [
   { path: "/", priority: "1.0" },
+  { path: "/operator.html", priority: "0.5" },
+  { path: "/contact.html", priority: "0.5" },
+  { path: "/privacy.html", priority: "0.3" },
+  { path: "/SF6_combo_tool", priority: "0.7" },
   { path: "/elena", priority: "0.9" },
   { path: "/ingrid", priority: "0.9" },
   { path: "/yasmine/", priority: "0.9" },

@@ -67,6 +67,13 @@ export default function ArchiveHome() {
         </div>
       </section>
 
+      <section className="archive-introduction" aria-labelledby="archive-intro-title">
+        <p className="archive-kicker">このサイトでできること</p>
+        <h2 id="archive-intro-title">次の練習に使うコンボを、見つけよう。</h2>
+        <p>SF6 コンボ図鑑【雅】は、ストリートファイター6のコンボを動画とデータで調べられる攻略サイトです。キャラクターを選び、ダメージ・起き攻め・Drive消費を比べながら、状況に合うルートを探せます。</p>
+        <p>まずは再現しやすい基本コンボから。動画で動きを確認し、ゲージを使う場面やコンボ後の攻めまで練習してみましょう。掲載内容はゲームの更新によって変わる場合があります。</p>
+      </section>
+
       <section className="archive-character-zone" aria-labelledby="character-list-title">
         <div className="archive-section-heading">
           <p className="archive-kicker">Character select</p>
@@ -146,6 +153,24 @@ export default function ArchiveHome() {
           </div>
           <span className="archive-card-action">ツールを開く</span>
         </a>
+      </section>
+      <section className="archive-related" aria-labelledby="relic-title">
+        <div className="archive-section-heading">
+          <p className="archive-kicker">運営者が制作したブラウザーゲーム</p>
+          <h2 id="relic-title">モンスターレリック</h2>
+        </div>
+        <div className="archive-relic-card">
+          <a href="https://monsterrelic.miyabi-combo.com/about" aria-label="モンスターレリックのゲーム紹介を見る">
+            <img src="https://monsterrelic.miyabi-combo.com/screenshots/introduction/player-d3.png" alt="モンスターレリックの実プレイ画面。4体の敵と、攻撃・回復カードが揃った手札。" width="1915" height="955" loading="lazy" />
+          </a>
+          <div className="archive-relic-copy">
+            <p className="archive-kicker">無料 / ターン制ローグライクRPG</p>
+            <h3>今ある手札で、次の一手を。</h3>
+            <p>毎回変わるダンジョンを、拾ったカードと必殺技で攻略。敵の位置と手札を見て、攻めるか、回復するか、切り抜ける方法を考えよう。</p>
+            <p>スマートフォン・PCのブラウザーで遊べます。実際のプレイ画面や冒険セットの使い方は、ゲーム紹介でご覧いただけます。</p>
+            <div className="archive-related-actions"><a href="https://monsterrelic.miyabi-combo.com/about">ゲームの紹介を見る →</a><a href="https://monsterrelic.miyabi-combo.com/">無料で遊ぶ →</a></div>
+          </div>
+        </div>
       </section>
     </main>
   );
