@@ -813,7 +813,7 @@ const yasmineCombosRaw: Omit<ComboData, "driveConsumption" | "superConsumption">
     position: "画面中央・端付近",
     difficulty: "難",
     stock: "なし",
-    description: "ODダロイからのSA2発動の画面端裏周りから表中断持続のセットプレイ5MK~5MK~HK最後のHKを遅らせる必要がある為やや難しい",
+    description: "ODダロイからのSA2発動の画面端裏周りから表中段持続のセットプレイ5MK~5MK~HK最後のHKを遅らせる必要がある為やや難しい",
     situationTags: ["セットプレイ", "運び"],
     videoAsset: comboVideoAsset("yasmine_56", "ヤスミン #56 SA2裏周り表中段"),
   },
