@@ -39,7 +39,7 @@ export interface ComboData {
   damage: number;
   damageLabel?: string;                    // 表示用ダメージ（例: 4960(5248)）
   knockdown: string;
-  position: "どこでも" | "端" | "端付近" | "近距離" | "どこでも/端で強化";
+  position: "どこでも" | "端" | "端付近" | "画面中央・端付近" | "近距離" | "どこでも/端で強化";
   difficulty: "易" | "中" | "難";
   driveGaugeCost?: DriveGaugeCost;        // ドライブゲージ詳細計算（notationから自動計算）
   stock?: string;                          // キャラ固有リソース表示（例: イングリッドのストック）
