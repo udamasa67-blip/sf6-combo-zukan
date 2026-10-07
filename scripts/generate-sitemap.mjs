@@ -10,9 +10,9 @@ const routes = [
   { path: "/operator.html", priority: "0.5" },
   { path: "/contact.html", priority: "0.5" },
   { path: "/privacy.html", priority: "0.3" },
-  { path: "/SF6_combo_tool", priority: "0.7" },
-  { path: "/elena", priority: "0.9" },
-  { path: "/ingrid", priority: "0.9" },
+  { path: "/SF6_combo_tool/", priority: "0.7" },
+  { path: "/elena/", priority: "0.9" },
+  { path: "/ingrid/", priority: "0.9" },
   { path: "/yasmine/", priority: "0.9" },
 ];
 

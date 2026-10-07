@@ -7,7 +7,29 @@ const baseHtml = readFileSync(resolve(outputDir, "index.html"), "utf8");
 
 const routes = [
   {
+    path: "elena",
+    title: "SF6 エレナ コンボ集｜起き攻め・リーサル・Drive効率検索",
+    description: "SF6 エレナのコンボ集。起き攻め・リーサル・Drive効率を検索できます。",
+    keywords: "SF6 エレナ, エレナ コンボ, 起き攻め, リーサル, Drive効率",
+    characterName: "エレナ（Elena）",
+  },
+  {
+    path: "ingrid",
+    title: "SF6 イングリッド コンボ集｜ストック・起き攻め・リーサル検索",
+    description: "SF6 イングリッドのコンボ集。ストック・起き攻め・リーサルを検索できます。",
+    keywords: "SF6 イングリッド, イングリッド コンボ, ストック, 起き攻め, リーサル",
+    characterName: "イングリッド（Ingrid）",
+  },
+  {
+    path: "SF6_combo_tool",
+    aliases: ["sf6_combo_tool"],
+    title: "SF6コンボ入力コマンド作成ツール｜SF6 コンボ図鑑",
+    description: "SF6のコンボ入力コマンドをクリックだけで作成し、テキストとしてコピーできるツール。",
+    keywords: "SF6 コンボ入力, コマンド作成ツール",
+  },
+  {
     path: "yasmine",
+    characterName: "ヤスミン（Yasmine）",
     title: "ヤスミン コンボ攻略｜SF6 起き攻め・SA2・バヤニ連携",
     description:
       "ストリートファイター6（SF6）ヤスミンのコンボ攻略。基本コンボから起き攻め、SA2、バヤニ・モード、画面端セットプレイまで動画付きで検索できます。",
@@ -28,7 +50,7 @@ for (const route of routes) {
   const url = `${siteUrl}/${route.path}/`;
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": "CollectionPage",
+    "@type": route.characterName ? "CollectionPage" : "WebPage",
     url,
     name: route.title,
     description: route.description,
@@ -38,11 +60,13 @@ for (const route of routes) {
       name: "SF6 コンボ図鑑【雅】",
       url: `${siteUrl}/`,
     },
-    about: {
-      "@type": "Thing",
-      name: "ヤスミン（Yasmine）",
-      description: "ストリートファイター6のキャラクター、ヤスミンのコンボ攻略",
-    },
+    ...(route.characterName ? {
+      about: {
+        "@type": "Thing",
+        name: route.characterName,
+        description: route.description,
+      },
+    } : {}),
   };
 
   let html = baseHtml
@@ -68,7 +92,10 @@ for (const route of routes) {
       "  </head>",
   );
 
-  const routeDir = resolve(outputDir, route.path);
-  mkdirSync(routeDir, { recursive: true });
-  writeFileSync(resolve(routeDir, "index.html"), html);
+  // Explicit directories return successful static responses; unknown paths stay 404.
+  for (const routePath of [route.path, ...(route.aliases || [])]) {
+    const routeDir = resolve(outputDir, routePath);
+    mkdirSync(routeDir, { recursive: true });
+    writeFileSync(resolve(routeDir, "index.html"), html);
+  }
 }

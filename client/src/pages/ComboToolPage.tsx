@@ -31,7 +31,7 @@ export default function ComboToolPage() {
       canonical.rel = "canonical";
       document.head.appendChild(canonical);
     }
-    canonical.href = window.location.origin + "/SF6_combo_tool";
+    canonical.href = window.location.origin + "/SF6_combo_tool/";
   }, []);
 
   return (

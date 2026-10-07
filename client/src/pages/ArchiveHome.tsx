@@ -81,7 +81,7 @@ export default function ArchiveHome() {
         </div>
 
         <div className="archive-character-grid">
-          <a className="archive-character-card available" href="/elena">
+          <a className="archive-character-card available" href="/elena/">
             <div className="archive-card-main">
               <span className="archive-card-status">公開中</span>
               <h3>エレナ</h3>
@@ -100,7 +100,7 @@ export default function ArchiveHome() {
             <span className="archive-card-action">エレナを見る</span>
           </a>
 
-          <a className="archive-character-card available" href="/ingrid" aria-label="イングリッド">
+          <a className="archive-character-card available" href="/ingrid/" aria-label="イングリッド">
             <div className="archive-card-main">
               <span className="archive-card-status">公開中</span>
               <h3>イングリッド</h3>
@@ -145,7 +145,7 @@ export default function ArchiveHome() {
           <p className="archive-kicker">Command builder</p>
           <h2 id="combo-tool-link-title">SF6コンボ入力コマンド作成ツール</h2>
         </div>
-        <a className="archive-tool-card" href="/SF6_combo_tool">
+        <a className="archive-tool-card" href="/SF6_combo_tool/">
           <div>
             <span className="archive-card-status">ツール</span>
             <h3>クリックだけでコンボ表記を作成</h3>

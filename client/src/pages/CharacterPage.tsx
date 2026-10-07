@@ -409,7 +409,7 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
       resolvedConfig.seoTitle ||
       `SF6 ${resolvedConfig.nameJp} コンボまとめ 2026 | ${resolvedConfig.title}`;
     const description = resolvedConfig.seoDescription || resolvedConfig.description;
-    const canonicalPath = resolvedConfig.id === "yasmine" ? "/yasmine/" : `/${resolvedConfig.id}`;
+    const canonicalPath = `/${resolvedConfig.id}/`;
 
     if (window.location.pathname === "/" && resolvedConfig.id === "elena") {
       window.history.replaceState(null, "", canonicalPath);
@@ -1107,8 +1107,8 @@ export default function CharacterPage({ characterId, config }: CharacterPageProp
             <div className="character-selector">
               <p className="selector-label">他のキャラクターを見る</p>
               <div className="character-links">
-                <a href="/elena" className={`character-link ${characterId === "elena" || !characterId ? "active" : ""}`}>エレナ</a>
-                <a href="/ingrid" className={`character-link ${characterId === "ingrid" ? "active" : ""}`}>イングリッド</a>
+                <a href="/elena/" className={`character-link ${characterId === "elena" || !characterId ? "active" : ""}`}>エレナ</a>
+                <a href="/ingrid/" className={`character-link ${characterId === "ingrid" ? "active" : ""}`}>イングリッド</a>
                 <a href="/yasmine/" className={`character-link ${characterId === "yasmine" ? "active" : ""}`}>ヤスミン</a>
               </div>
             </div>
