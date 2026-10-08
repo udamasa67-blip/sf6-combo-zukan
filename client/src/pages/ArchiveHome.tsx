@@ -156,19 +156,19 @@ export default function ArchiveHome() {
       </section>
       <section className="archive-related" aria-labelledby="relic-title">
         <div className="archive-section-heading">
-          <p className="archive-kicker">運営者が制作したブラウザーゲーム</p>
+          <p className="archive-kicker">同じ制作者のブラウザゲーム</p>
           <h2 id="relic-title">モンスターレリック</h2>
         </div>
         <div className="archive-relic-card">
-          <a href="https://monsterrelic.miyabi-combo.com/about" aria-label="モンスターレリックのゲーム紹介を見る">
+          <a className="archive-relic-preview" href="https://monsterrelic.miyabi-combo.com/about" aria-label="モンスターレリックのゲーム紹介を見る">
             <img src="https://monsterrelic.miyabi-combo.com/screenshots/introduction/player-d3.png" alt="モンスターレリックの実プレイ画面。4体の敵と、攻撃・回復カードが揃った手札。" width="1915" height="955" loading="lazy" />
           </a>
           <div className="archive-relic-copy">
-            <p className="archive-kicker">無料 / ターン制ローグライクRPG</p>
-            <h3>今ある手札で、次の一手を。</h3>
-            <p>毎回変わるダンジョンを、拾ったカードと必殺技で攻略。敵の位置と手札を見て、攻めるか、回復するか、切り抜ける方法を考えよう。</p>
-            <p>スマートフォン・PCのブラウザーで遊べます。実際のプレイ画面や冒険セットの使い方は、ゲーム紹介でご覧いただけます。</p>
-            <div className="archive-related-actions"><a href="https://monsterrelic.miyabi-combo.com/about">ゲームの紹介を見る →</a><a href="https://monsterrelic.miyabi-combo.com/">無料で遊ぶ →</a></div>
+            <p>SF6の攻略・コンボ検索とは別に、同じ制作者のブラウザゲームも公開しています。</p>
+            <div className="archive-related-actions">
+              <a href="https://monsterrelic.miyabi-combo.com/">モンスターレリックで遊ぶ →</a>
+              <a href="https://monsterrelic.miyabi-combo.com/about">ゲーム紹介 →</a>
+            </div>
           </div>
         </div>
       </section>

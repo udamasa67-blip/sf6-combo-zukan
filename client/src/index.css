@@ -3260,5 +3260,29 @@
 /* Site introduction and related game */
 .archive-introduction,.archive-related{width:min(100%,1400px);margin:0 auto;padding:2.5rem 2rem;color:#f0f2ed}
 .archive-introduction{border-bottom:1px solid #253029}.archive-introduction h2{font-size:clamp(1.4rem,3vw,2rem);margin:.7rem 0 1rem}.archive-introduction p:not(.archive-kicker){max-width:980px;color:#bdc6bf;line-height:1.9;margin:.7rem 0}
-.archive-related{padding-bottom:4rem}.archive-relic-card{overflow:hidden;border:1px solid #536049;border-radius:12px;background:#111b15}.archive-relic-card img{display:block;width:100%;height:auto}.archive-relic-copy{padding:clamp(20px,4vw,36px)}.archive-relic-copy h3{font-size:clamp(1.5rem,3vw,2rem);margin:.7rem 0}.archive-relic-copy p:not(.archive-kicker){max-width:900px;color:#c4cdc2;line-height:1.9;margin:.8rem 0}.archive-related-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:22px}.archive-related-actions a{display:inline-block;padding:12px 18px;border:1px solid #b4c38c;border-radius:6px;color:#f2f5e5;background:#263f2e;text-decoration:none}.archive-related-actions a:hover{background:#38533a}.archive-site-footer{padding:32px 24px;background:#080d0a;color:#bec8c0;border-top:1px solid #334037;text-align:center}.archive-site-footer p{font-weight:700;margin-bottom:16px}.archive-site-footer nav{display:flex;justify-content:center;gap:16px 24px;flex-wrap:wrap}.archive-site-footer a{color:#e2eadb;text-underline-offset:5px}.archive-site-footer small{display:block;line-height:1.8;margin-top:24px}.archive-related a:focus-visible,.archive-site-footer a:focus-visible{outline:3px solid #cbe3a5;outline-offset:4px}
-@media(max-width:600px){.archive-introduction,.archive-related{padding:24px 16px}.archive-related-actions{flex-direction:column}.archive-related-actions a{text-align:center}}
+/* Keep the related game secondary to the SF6 archive and command tool. */
+.archive-related { padding-top: 0; padding-bottom: 3rem; }
+.archive-related .archive-section-heading { margin-bottom: 1rem; }
+.archive-related h2 { font-size: 1.5rem; }
+.archive-relic-card {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.25rem;
+  border: 1px solid #334037;
+  border-radius: 8px;
+  background: #0d1510;
+}
+.archive-relic-preview { display: block; border-radius: 4px; overflow: hidden; }
+.archive-relic-card img { display: block; width: 100%; height: auto; }
+.archive-relic-copy p { color: #c4cdc2; line-height: 1.7; margin: 0; }
+.archive-related-actions { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; margin-top: 0.75rem; }
+.archive-related-actions a { display: inline-flex; align-items: center; min-height: 44px; color: #d4e8c3; text-decoration: underline; text-underline-offset: 4px; }
+.archive-related-actions a:hover { color: #f2f5e5; }
+@media (max-width: 600px) {
+  .archive-relic-card { grid-template-columns: 1fr; gap: 1rem; padding: 1rem; }
+  .archive-relic-preview { width: min(100%, 200px); }
+}
+.archive-site-footer{padding:32px 24px;background:#080d0a;color:#bec8c0;border-top:1px solid #334037;text-align:center}.archive-site-footer p{font-weight:700;margin-bottom:16px}.archive-site-footer nav{display:flex;justify-content:center;gap:16px 24px;flex-wrap:wrap}.archive-site-footer a{color:#e2eadb;text-underline-offset:5px}.archive-site-footer small{display:block;line-height:1.8;margin-top:24px}.archive-related a:focus-visible,.archive-site-footer a:focus-visible{outline:3px solid #cbe3a5;outline-offset:4px}
+@media(max-width:600px){.archive-introduction,.archive-related{padding:24px 16px}.archive-related-actions{align-items:flex-start}}
