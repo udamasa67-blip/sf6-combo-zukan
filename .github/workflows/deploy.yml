@@ -42,8 +42,8 @@ jobs:
         env:
           SITE_URL: https://www.miyabi-combo.com
 
-      - name: Add SPA fallback
-        run: cp dist/public/index.html dist/public/404.html
+      - name: Verify generated not-found page
+        run: grep -q 'noindex, follow' dist/public/404.html
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

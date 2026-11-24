@@ -1,9 +1,19 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { loadInitialContent, renderInitialContent, withInitialContent } from "./initial-html-content.mjs";
 
 const siteUrl = (process.env.SITE_URL || "https://www.miyabi-combo.com").replace(/\/+$/, "");
 const outputDir = resolve("dist/public");
 const baseHtml = readFileSync(resolve(outputDir, "index.html"), "utf8");
+const characters = await loadInitialContent();
+writeFileSync(resolve(outputDir, "index.html"), withInitialContent(baseHtml, renderInitialContent("", characters)));
+
+// Pages also serves this document for unknown URLs. The initial home body must not leak there.
+const notFoundBase = baseHtml
+  .replace(/<title>.*?<\/title>/, "<title>ページが見つかりません｜SF6 コンボ図鑑</title>")
+  .replace(/<meta name="robots"[^>]*>/, '<meta name="robots" content="noindex, follow">')
+  .replace(/(["'])\.\//g, "$1/");
+writeFileSync(resolve(outputDir, "404.html"), withInitialContent(notFoundBase, renderInitialContent("404", characters)));
 
 const routes = [
   {
@@ -91,6 +101,8 @@ for (const route of routes) {
       `    <script type="application/ld+json" data-character-structured-data>${JSON.stringify(structuredData).replace(/</g, "\\u003c")}</script>\n` +
       "  </head>",
   );
+
+  html = withInitialContent(html, renderInitialContent(route.path, characters));
 
   // Explicit directories return successful static responses; unknown paths stay 404.
   for (const routePath of [route.path, ...(route.aliases || [])]) {

@@ -1,0 +1,119 @@
+.sf6-first {
+  color: #e9efe4;
+  font:
+    16px/1.5 system-ui,
+    -apple-system,
+    "Hiragino Sans",
+    "Yu Gothic",
+    sans-serif;
+  width: min(100%, 900px);
+  margin: auto;
+  padding: 18px clamp(16px, 4vw, 30px) 24px;
+  box-sizing: border-box;
+  min-height: 100vh;
+  background: radial-gradient(ellipse at top, #223324, #0b100d 76%);
+}
+.sf6-first * {
+  box-sizing: border-box;
+}
+.sf6-first a {
+  color: #d2e8be;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.sf6-first a:focus-visible {
+  outline: 2px solid #dfce7e;
+  outline-offset: 3px;
+}
+.sf6-first .top,
+.sf6-first .route {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+  flex-wrap: wrap;
+}
+.sf6-first .top {
+  border-bottom: 1px solid #385143;
+  padding-bottom: 12px;
+}
+.sf6-first .brand {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.sf6-first nav {
+  display: flex;
+  gap: 8px 16px;
+  flex-wrap: wrap;
+  font-size: 14px;
+}
+.sf6-first .eyebrow {
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: #ddcc88;
+  margin: 17px 0 5px;
+}
+.sf6-first h1 {
+  font-size: clamp(22px, 5.4vw, 33px);
+  line-height: 1.22;
+  margin: 0;
+}
+.sf6-first .desc {
+  margin: 8px 0 15px;
+  font-size: 15px;
+  color: #d0ded0;
+}
+.sf6-first article {
+  padding: 13px 15px 14px;
+  background: #141f17;
+  border: 1px solid #354d3d;
+  border-radius: 10px;
+  margin-bottom: 9px;
+}
+.sf6-first .route span:first-child {
+  color: #ddd092;
+  font-size: 12px;
+  font-weight: 700;
+}
+.sf6-first .route span {
+  color: #c8d3c3;
+  font-size: 12px;
+}
+.sf6-first h2 {
+  font-size: 17px;
+  color: #eaf1dc;
+  margin: 5px 0 1px;
+}
+.sf6-first article p {
+  font-size: 14px;
+  margin: 2px 0 7px;
+  color: #cfd9c9;
+}
+.sf6-first code {
+  display: block;
+  padding: 5px 8px;
+  border-left: 2px solid #90a96e;
+  background: #0a120c;
+  color: #e6efd9;
+  font-size: 12px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.sf6-first .foot {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: #c1cdbe;
+}
+/* This block only exists before the existing React page mounts. */
+#root:has(> .sf6-first) {
+  background: #0b100d;
+}
+.sf6-first a {
+  display: inline-block;
+  min-height: 24px;
+}
+.sf6-first .foot[aria-label] {
+  padding-top: 10px;
+  border-top: 1px solid #385143;
+}
